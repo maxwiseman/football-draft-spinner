@@ -42,9 +42,9 @@ const WheelComponent = ({
   let angleCurrent = 0;
   let angleDelta = 0;
   let canvasContext: CanvasRenderingContext2D;
-  let maxSpeed = Math.PI / segments.length;
-  const upTime = segments.length * upDuration;
-  const downTime = segments.length * downDuration;
+  let maxSpeed = (Math.PI / segments.length) * Math.random();
+  const upTime = segments.length * upDuration * Math.random();
+  const downTime = segments.length * downDuration * Math.random();
   let spinStart = 0;
   let frames = 0;
   const centerX = gameWidth / 2;
