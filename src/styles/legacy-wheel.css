@@ -1,0 +1,63 @@
+.circle {
+  position: relative;
+  border: 1px solid black;
+  padding: 0;
+  width: 90vh;
+  height: 90vh;
+  border-radius: 50%;
+  list-style: none;
+  overflow: hidden;
+}
+li {
+  overflow: hidden;
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 50%;
+  height: 50%;
+  transform-origin: 0% 100%;
+}
+.text {
+  position: absolute;
+  left: -100%;
+  width: 200%;
+  height: 200%;
+  text-align: center;
+  padding-top: 20px;
+}
+li:first-child .text {
+  background: green;
+}
+li:nth-child(2) .text {
+  background: tomato;
+}
+li:nth-child(3) .text {
+  background: aqua;
+}
+li:nth-child(4) .text {
+  background: yellow;
+}
+li:nth-child(5) .text {
+  background: orange;
+}
+li:nth-child(6) .text {
+  background: purple;
+}
+li:nth-child(7) .text {
+  background: cyan;
+}
+li:nth-child(8) .text {
+  background: brown;
+}
+li:nth-child(9) .text {
+  background: gray;
+}
+li:nth-child(10) .text {
+  background: pink;
+}
+li:nth-child(11) .text {
+  background: maroon;
+}
+li:nth-child(12) .text {
+  background: gold;
+}
