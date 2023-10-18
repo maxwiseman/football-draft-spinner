@@ -9,6 +9,7 @@ const WheelComponent = (
     segColors,
     winningSegment,
     onFinished,
+    onSegmentChange,
     primaryColor = "black",
     contrastColor = "white",
     buttonText = "Spin",
@@ -18,11 +19,13 @@ const WheelComponent = (
     downDuration = 1000,
     fontFamily = "proxima-nova",
     gameWidth = 1000,
+    playSounds = true,
   }: {
     segments: string[];
     segColors: string[];
     winningSegment?: string;
     onFinished: (arg0: string) => void;
+    onSegmentChange?: (arg0: string) => void;
     primaryColor?: string;
     contrastColor?: string;
     buttonText?: string;
@@ -32,6 +35,7 @@ const WheelComponent = (
     downDuration?: number;
     fontFamily?: string;
     gameWidth?: number;
+    playSounds?: boolean;
   },
   ref: Ref<{ spin: () => void }>,
 ) => {
@@ -122,11 +126,15 @@ const WheelComponent = (
 
     if (currentSegment != lastSegment) {
       lastSegment = currentSegment;
-      const clickAudio = new Audio("/click.wav");
-      clickAudio.playbackRate = Math.random() * (1.5 - 0.1) + 0.5;
-      clickAudio
-        .play()
-        .catch((err: Error) => console.log("Error playing audio: ", err));
+      onSegmentChange ? onSegmentChange(currentSegment) : null;
+      if (playSounds) {
+        const clickAudio = new Audio("/click.wav");
+        clickAudio.volume = 0.7;
+        // clickAudio.playbackRate = Math.random() * (1.5 - 0.1) + 0.5;
+        clickAudio
+          .play()
+          .catch((err: Error) => console.log("Error playing audio: ", err));
+      }
     }
 
     angleCurrent += angleDelta;
@@ -251,6 +259,7 @@ const WheelComponent = (
       initCanvas();
       spin();
     },
+    currentSegment: currentSegment,
   }));
   return (
     <div id="wheel">

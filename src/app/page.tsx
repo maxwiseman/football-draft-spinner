@@ -1,10 +1,11 @@
 "use client";
 
-import { createRef, useEffect } from "react";
+import { createRef, useEffect, useState } from "react";
 import WheelComponent from "./_components/wheel";
 
 export default function Page() {
-  const WheelRef = createRef<{ spin: () => void }>();
+  const WheelRef = createRef<{ spin: () => void; currentSegment: string }>();
+  const [currentSegment, setCurrentSegment] = useState("");
   const segments = [
     "Team A",
     "Team B",
@@ -46,6 +47,9 @@ export default function Page() {
         segColors={segColors}
         // winningSegment="Team G"
         onFinished={onFinished}
+        onSegmentChange={(segment) => {
+          setCurrentSegment(segment);
+        }}
         primaryColor="black"
         contrastColor="white"
         buttonText="Spin"
@@ -57,6 +61,7 @@ export default function Page() {
         fontFamily="Arial"
         ref={WheelRef}
       />
+      <p>{currentSegment}</p>
     </div>
   );
 }
