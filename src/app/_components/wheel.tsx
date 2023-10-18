@@ -47,9 +47,8 @@ const WheelComponent = (
   let angleDelta = 0;
   let canvasContext: CanvasRenderingContext2D | null;
   let maxSpeed = (Math.PI / segments.length) * Math.max(Math.random(), 0.1);
-  const upTime = segments.length * upDuration * Math.max(Math.random(), 0.1);
-  const downTime =
-    segments.length * downDuration * Math.max(Math.random(), 0.1);
+  let upTime = segments.length * upDuration * Math.max(Math.random(), 0.1);
+  let downTime = segments.length * downDuration * Math.max(Math.random(), 0.1);
   let spinStart = 0;
   let frames = 0;
   const centerX = gameWidth / 2;
@@ -80,6 +79,8 @@ const WheelComponent = (
     canvasContext = canvas.getContext("2d");
   };
   const spin = () => {
+    upTime = segments.length * upDuration * Math.max(Math.random(), 0.1);
+    downTime = segments.length * downDuration * Math.max(Math.random(), 0.1);
     isStarted = true;
     if (timerHandle === 0) {
       spinStart = new Date().getTime();
