@@ -123,6 +123,7 @@ const WheelComponent = (
     if (currentSegment != lastSegment) {
       lastSegment = currentSegment;
       const clickAudio = new Audio("/click.wav");
+      clickAudio.playbackRate = Math.random() * (1.5 - 0.1) + 0.5;
       clickAudio
         .play()
         .catch((err: Error) => console.log("Error playing audio: ", err));
