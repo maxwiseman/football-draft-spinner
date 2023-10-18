@@ -39,6 +39,7 @@ const WheelComponent = (
   const needleSize = gameWidth * 0.1;
   const lineWidth = gameWidth * 0.02;
   let currentSegment = "";
+  let lastSegment = "";
   let isStarted = false;
   const [isFinished, setFinished] = useState(false);
   let timerHandle = 0;
@@ -117,6 +118,14 @@ const WheelComponent = (
           maxSpeed * Math.sin((progress * Math.PI) / 2 + Math.PI / 2);
       }
       if (progress >= 1) finished = true;
+    }
+
+    if (currentSegment != lastSegment) {
+      lastSegment = currentSegment;
+      const clickAudio = new Audio("/click.wav");
+      clickAudio
+        .play()
+        .catch((err: Error) => console.log("Error playing audio: ", err));
     }
 
     angleCurrent += angleDelta;
