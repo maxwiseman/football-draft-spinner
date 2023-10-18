@@ -1,36 +1,40 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
+import type { Ref } from "react";
+import { forwardRef, useEffect, useImperativeHandle, useState } from "react";
 
-const WheelComponent = ({
-  segments,
-  segColors,
-  winningSegment,
-  onFinished,
-  primaryColor = "black",
-  contrastColor = "white",
-  buttonText = "Spin",
-  isOnlyOnce = true,
-  size = 290,
-  upDuration = 100,
-  downDuration = 1000,
-  fontFamily = "proxima-nova",
-  gameWidth = 1000,
-}: {
-  segments: string[];
-  segColors: string[];
-  winningSegment?: string;
-  onFinished: (arg0: string) => void;
-  primaryColor?: string;
-  contrastColor?: string;
-  buttonText?: string;
-  isOnlyOnce?: boolean;
-  size?: number;
-  upDuration?: number;
-  downDuration?: number;
-  fontFamily?: string;
-  gameWidth?: number;
-}) => {
+const WheelComponent = (
+  {
+    segments,
+    segColors,
+    winningSegment,
+    onFinished,
+    primaryColor = "black",
+    contrastColor = "white",
+    buttonText = "Spin",
+    isOnlyOnce = true,
+    size = 290,
+    upDuration = 100,
+    downDuration = 1000,
+    fontFamily = "proxima-nova",
+    gameWidth = 1000,
+  }: {
+    segments: string[];
+    segColors: string[];
+    winningSegment?: string;
+    onFinished: (arg0: string) => void;
+    primaryColor?: string;
+    contrastColor?: string;
+    buttonText?: string;
+    isOnlyOnce?: boolean;
+    size?: number;
+    upDuration?: number;
+    downDuration?: number;
+    fontFamily?: string;
+    gameWidth?: number;
+  },
+  ref: Ref<{ spin: () => void }>,
+) => {
   const gameHeight = gameWidth; // * .80;
   const needleSize = gameWidth * 0.1;
   const lineWidth = gameWidth * 0.02;
@@ -41,7 +45,7 @@ const WheelComponent = ({
   const timerDelay = segments.length;
   let angleCurrent = 0;
   let angleDelta = 0;
-  let canvasContext: CanvasRenderingContext2D;
+  let canvasContext: CanvasRenderingContext2D | null;
   let maxSpeed = (Math.PI / segments.length) * Math.max(Math.random(), 0.1);
   const upTime = segments.length * upDuration * Math.max(Math.random(), 0.1);
   const downTime =
@@ -65,7 +69,6 @@ const WheelComponent = ({
 
   const initCanvas = () => {
     let canvas = document.getElementById("canvas") as HTMLCanvasElement;
-    console.log(navigator);
     if (navigator.userAgent.indexOf("MSIE") !== -1) {
       canvas = document.createElement("canvas");
       canvas.setAttribute("width", gameWidth.toString());
@@ -74,7 +77,7 @@ const WheelComponent = ({
       document.getElementById("wheel")?.appendChild(canvas);
     }
     canvas?.addEventListener("click", spin, false);
-    canvasContext = canvas.getContext("2d")!;
+    canvasContext = canvas.getContext("2d");
   };
   const spin = () => {
     isStarted = true;
@@ -141,6 +144,7 @@ const WheelComponent = ({
   const drawSegment = (key: number, lastAngle: number, angle: number) => {
     const ctx = canvasContext;
     const value = segments[key]!;
+    if (!ctx) return;
     ctx.save();
     ctx.beginPath();
     ctx.moveTo(centerX, centerY);
@@ -164,6 +168,7 @@ const WheelComponent = ({
     let lastAngle = angleCurrent;
     const len = segments.length;
     const PI2 = Math.PI * 2;
+    if (!ctx) return;
     ctx.lineWidth = 1;
     ctx.strokeStyle = primaryColor;
     ctx.textBaseline = "middle";
@@ -201,6 +206,7 @@ const WheelComponent = ({
 
   const drawNeedle = () => {
     const ctx = canvasContext;
+    if (!ctx) return;
     ctx.lineWidth = 1;
     ctx.strokeStyle = contrastColor;
     ctx.fillStyle = contrastColor;
@@ -226,8 +232,15 @@ const WheelComponent = ({
   };
   const clear = () => {
     const ctx = canvasContext;
+    if (!ctx) return;
     ctx.clearRect(0, 0, gameWidth, gameHeight);
   };
+  useImperativeHandle(ref, () => ({
+    spin: () => {
+      initCanvas();
+      spin();
+    },
+  }));
   return (
     <div id="wheel">
       <canvas
@@ -241,4 +254,4 @@ const WheelComponent = ({
     </div>
   );
 };
-export default WheelComponent;
+export default forwardRef(WheelComponent);

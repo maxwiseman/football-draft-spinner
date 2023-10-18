@@ -1,8 +1,10 @@
 "use client";
 
+import { createRef, useEffect } from "react";
 import WheelComponent from "./_components/wheel";
 
 export default function Page() {
+  const WheelRef = createRef<{ spin: () => void }>();
   const segments = [
     "Team A",
     "Team B",
@@ -26,6 +28,15 @@ export default function Page() {
   const onFinished = (winner: string) => {
     console.log(winner);
   };
+  useEffect(() => {
+    document.addEventListener("keydown", (event) => {
+      if (event.key === "Enter") {
+        if (WheelRef.current) {
+          WheelRef.current.spin();
+        }
+      }
+    });
+  }, []);
 
   return (
     <div className="m-auto w-min">
@@ -43,6 +54,7 @@ export default function Page() {
         upDuration={100}
         downDuration={1000}
         fontFamily="Arial"
+        ref={WheelRef}
       />
     </div>
   );
