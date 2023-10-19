@@ -61,7 +61,7 @@ export default function Page() {
         fontFamily="Arial"
         ref={WheelRef}
       />
-      <p>{currentSegment}</p>
+      <h1>{currentSegment}</h1>
     </div>
   );
 }
