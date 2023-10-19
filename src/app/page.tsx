@@ -61,7 +61,7 @@ export default function Page() {
         fontFamily="Arial"
         ref={WheelRef}
       />
-      <h1>{currentSegment}</h1>
+      <h1 className="mx-auto mt-4 w-max">{currentSegment}</h1>
     </div>
   );
 }
