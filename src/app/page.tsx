@@ -7,42 +7,7 @@ import TeamWheelComponent from "./_components/teamWheel";
 
 export default function Page() {
   const WheelRef = createRef<{ spin: () => void; currentSegment: string }>();
-  const [currentSegment, setCurrentSegment] = useState("");
-  const segColors = [
-    "#EE4040",
-    "#F0CF50",
-    "#815CD1",
-    "#3DA5E0",
-    "#34A24F",
-    "#F9AA1F",
-    "#EC3F3F",
-    "#FF9000",
-    "#EE4040",
-    "#F0CF50",
-    "#815CD1",
-    "#3DA5E0",
-    "#34A24F",
-    "#F9AA1F",
-    "#EC3F3F",
-    "#FF9000",
-    "#EE4040",
-    "#F0CF50",
-    "#815CD1",
-    "#3DA5E0",
-    "#34A24F",
-    "#F9AA1F",
-    "#EC3F3F",
-    "#FF9000",
-    "#EE4040",
-    "#F0CF50",
-    "#815CD1",
-    "#3DA5E0",
-    "#34A24F",
-    "#F9AA1F",
-    "#EC3F3F",
-    "#FF9000",
-    "#EE4040",
-  ];
+  const [currentSegment, setCurrentSegment] = useState(" ");
   useEffect(() => {
     document.addEventListener("keydown", (event) => {
       if (event.key === "Enter") {
@@ -56,17 +21,16 @@ export default function Page() {
   const teams = api.espn.getTeams.useQuery();
 
   return (
-    <div className="m-auto w-min">
+    <div className="m-auto flex h-screen min-h-max w-min flex-col justify-center">
       {!teams.isLoading && teams.data ? (
         <TeamWheelComponent
-          segments={teams.data}
-          segColors={segColors}
+          teams={teams.data}
           // winningSegment="Team G"
           onFinished={(winner) => {
-            console.log(winner.team);
+            console.log(winner);
           }}
-          onSegmentChange={(segment) => {
-            setCurrentSegment(segment.team.displayName);
+          onTeamChange={(team) => {
+            setCurrentSegment(team.displayName);
           }}
           primaryColor="black"
           contrastColor="white"
@@ -84,7 +48,7 @@ export default function Page() {
           <IconLoader className="inline-block animate-spin" /> Loading...
         </div>
       )}
-      <h1 className="mx-auto mt-4 w-max">{currentSegment}</h1>
+      <h1 className="mx-auto mt-6 w-max">{currentSegment}</h1>
     </div>
   );
 }

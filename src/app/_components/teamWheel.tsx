@@ -6,11 +6,10 @@ import { forwardRef, useEffect, useImperativeHandle, useState } from "react";
 
 const TeamWheelComponent = (
   {
-    segments,
-    segColors,
+    teams,
     winningSegment,
     onFinished,
-    onSegmentChange,
+    onTeamChange,
     primaryColor = "black",
     contrastColor = "white",
     buttonText = "Spin",
@@ -22,8 +21,7 @@ const TeamWheelComponent = (
     gameWidth = 1000,
     playSounds = true,
   }: {
-    segments: Team[];
-    segColors: string[];
+    teams: { team: Team }[];
     winningSegment?: {
       team: {
         name: string;
@@ -32,7 +30,7 @@ const TeamWheelComponent = (
       };
     };
     onFinished: (arg0: Team) => void;
-    onSegmentChange?: (arg0: Team) => void;
+    onTeamChange?: (arg0: Team) => void;
     primaryColor?: string;
     contrastColor?: string;
     buttonText?: string;
@@ -49,12 +47,12 @@ const TeamWheelComponent = (
   const gameHeight = gameWidth; // * .80;
   const needleSize = gameWidth * 0.1;
   const lineWidth = gameWidth * 0.02;
-  let currentSegment: Team;
-  let lastSegment: Team;
+  let currentSegment: { team: Team };
+  let lastSegment: { team: Team };
   let isStarted = false;
   const [isFinished, setFinished] = useState(false);
   let timerHandle = 0;
-  const timerDelay = segments.length;
+  const timerDelay = teams.length;
   let angleCurrent = 0;
   let angleDelta = 0;
   let canvasContext: CanvasRenderingContext2D | null;
@@ -96,7 +94,7 @@ const TeamWheelComponent = (
     isStarted = true;
     if (timerHandle === 0) {
       spinStart = new Date().getTime();
-      // maxSpeed = Math.PI / ((segments.length*2) + Math.random())
+      // maxSpeed = Math.PI / ((teams.length*2) + Math.random())
       maxSpeed = 0.2;
       frames = 0;
       timerHandle = setInterval(onTimerTick, timerDelay) as unknown as number;
@@ -113,7 +111,7 @@ const TeamWheelComponent = (
       angleDelta = maxSpeed * Math.sin((progress * Math.PI) / 2);
     } else {
       if (winningSegment) {
-        if (currentSegment === winningSegment && frames > segments.length) {
+        if (currentSegment === winningSegment && frames > teams.length) {
           progress = duration / upTime;
           angleDelta =
             maxSpeed * Math.sin((progress * Math.PI) / 2 + Math.PI / 2);
@@ -133,7 +131,7 @@ const TeamWheelComponent = (
 
     if (currentSegment != lastSegment) {
       lastSegment = currentSegment;
-      onSegmentChange ? onSegmentChange(currentSegment) : null;
+      onTeamChange ? onTeamChange(currentSegment.team) : null;
       if (playSounds) {
         const clickAudio = new Audio("/click.wav");
         clickAudio.volume = 0.7;
@@ -148,7 +146,7 @@ const TeamWheelComponent = (
     while (angleCurrent >= Math.PI * 2) angleCurrent -= Math.PI * 2;
     if (finished) {
       setFinished(true);
-      onFinished(currentSegment);
+      onFinished(currentSegment.team);
       clearInterval(timerHandle);
       timerHandle = 0;
       angleDelta = 0;
@@ -169,7 +167,7 @@ const TeamWheelComponent = (
 
   const drawSegment = (key: number, lastAngle: number, angle: number) => {
     const ctx = canvasContext;
-    const value = segments[key]!.team.name;
+    const value = teams[key]!.team.name;
     if (!ctx) return;
     ctx.save();
     ctx.beginPath();
@@ -177,7 +175,7 @@ const TeamWheelComponent = (
     ctx.arc(centerX, centerY, size, lastAngle, angle, false);
     ctx.lineTo(centerX, centerY);
     ctx.closePath();
-    ctx.fillStyle = segColors[key]!;
+    ctx.fillStyle = "#" + teams[key]!.team.color;
     ctx.fill();
     ctx.stroke();
     ctx.save();
@@ -192,7 +190,7 @@ const TeamWheelComponent = (
   const drawWheel = () => {
     const ctx = canvasContext;
     let lastAngle = angleCurrent;
-    const len = segments.length;
+    const len = teams.length;
     const PI2 = Math.PI * 2;
     if (!ctx) return;
     ctx.lineWidth = 1;
@@ -244,15 +242,13 @@ const TeamWheelComponent = (
     ctx.fill();
     const change = angleCurrent + Math.PI / 2;
     let i =
-      segments.length -
-      Math.floor((change / (Math.PI * 2)) * segments.length) -
-      1;
-    if (i < 0) i = i + segments.length;
+      teams.length - Math.floor((change / (Math.PI * 2)) * teams.length) - 1;
+    if (i < 0) i = i + teams.length;
     ctx.textAlign = "center";
     ctx.textBaseline = "middle";
     ctx.fillStyle = primaryColor;
     ctx.font = "bold 1.5em " + fontFamily;
-    currentSegment = segments[i]!;
+    currentSegment = teams[i]!;
     isStarted &&
       ctx.fillText(
         currentSegment!.team.name,
