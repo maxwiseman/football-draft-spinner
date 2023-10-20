@@ -51,7 +51,7 @@ export default function Page() {
           }}
           primaryColor="black"
           contrastColor="white"
-          buttonText="Spin"
+          buttonText="Spin the Wheel"
           isOnlyOnce={false}
           size={300}
           gameWidth={620}
