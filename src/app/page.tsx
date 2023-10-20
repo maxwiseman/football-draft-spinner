@@ -1,14 +1,13 @@
 "use client";
 
-import { createRef, useEffect, useState } from "react";
-import WheelComponent from "./_components/wheel";
 import { api } from "@/trpc/react";
 import { IconLoader } from "@tabler/icons-react";
+import { createRef, useEffect, useState } from "react";
+import TeamWheelComponent from "./_components/teamWheel";
 
 export default function Page() {
   const WheelRef = createRef<{ spin: () => void; currentSegment: string }>();
   const [currentSegment, setCurrentSegment] = useState("");
-  let segments;
   const segColors = [
     "#EE4040",
     "#F0CF50",
@@ -44,9 +43,6 @@ export default function Page() {
     "#FF9000",
     "#EE4040",
   ];
-  const onFinished = (winner: string) => {
-    console.log(winner);
-  };
   useEffect(() => {
     document.addEventListener("keydown", (event) => {
       if (event.key === "Enter") {
@@ -58,22 +54,19 @@ export default function Page() {
     // eslint-disable-next-line react-hooks/exhaustive-deps -- This should only run once
   }, []);
   const teams = api.espn.getTeams.useQuery();
-  if (teams.isFetched) {
-    segments = teams.data?.map((team) => {
-      return team.team.displayName;
-    });
-  }
 
   return (
     <div className="m-auto w-min">
-      {!teams.isLoading && segments ? (
-        <WheelComponent
-          segments={segments}
+      {!teams.isLoading && teams.data ? (
+        <TeamWheelComponent
+          segments={teams.data}
           segColors={segColors}
           // winningSegment="Team G"
-          onFinished={onFinished}
+          onFinished={(winner) => {
+            console.log(winner.team);
+          }}
           onSegmentChange={(segment) => {
-            setCurrentSegment(segment);
+            setCurrentSegment(segment.team.displayName);
           }}
           primaryColor="black"
           contrastColor="white"

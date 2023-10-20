@@ -34,7 +34,7 @@ interface TeamsResponse {
   }[];
 }
 
-interface Team {
+export interface Team {
   team: {
     id: string;
     uid: string;
