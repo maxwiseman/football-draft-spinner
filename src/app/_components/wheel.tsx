@@ -84,8 +84,8 @@ const WheelComponent = (
     canvasContext = canvas.getContext("2d");
   };
   const spin = () => {
-    upTime = upDuration * Math.max(Math.random() * 5, 2);
-    downTime = downDuration * Math.max(Math.random() * 5, 2);
+    upTime = upDuration * Math.max(Math.random() * 7, 3);
+    downTime = downDuration * Math.max(Math.random() * 7, 3);
     isStarted = true;
     if (timerHandle === 0) {
       spinStart = new Date().getTime();
@@ -133,7 +133,7 @@ const WheelComponent = (
         // clickAudio.playbackRate = Math.random() * (1.5 - 0.1) + 0.5;
         clickAudio
           .play()
-          .catch((err: Error) => console.log("Error playing audio: ", err));
+          .catch((err: Error) => console.error("Error playing audio: ", err));
       }
     }
 
