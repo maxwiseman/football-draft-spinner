@@ -27,10 +27,10 @@ blockquote {
   @apply mt-6 border-l-2 pl-6 italic;
 }
 thead tr {
-  @apply even:bg-muted m-0 border-t p-0;
+  @apply m-0 border-t p-0 even:bg-muted;
 }
 tbody tr {
-  @apply even:bg-muted m-0 border-t p-0;
+  @apply m-0 border-t p-0 even:bg-muted;
 }
 th {
   @apply border px-4 py-2 text-left font-bold [&[align=center]]:text-center [&[align=right]]:text-right;
@@ -42,10 +42,10 @@ ul {
   @apply my-6 ml-6 list-disc [&>li]:mt-2;
 }
 :not(pre) code {
-  @apply bg-muted relative rounded px-[0.3rem] py-[0.2rem] font-mono text-sm font-semibold;
+  @apply relative rounded bg-muted px-[0.3rem] py-[0.2rem] font-mono text-sm font-semibold;
 }
 .lead {
-  @apply text-muted-foreground text-xl;
+  @apply text-xl text-muted-foreground;
 }
 .large {
   @apply text-lg font-semibold;
@@ -54,7 +54,7 @@ ul {
   @apply text-sm font-medium leading-none;
 }
 .muted {
-  @apply text-muted-foreground text-sm;
+  @apply text-sm text-muted-foreground;
 }
 
 @layer base {
