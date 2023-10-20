@@ -43,7 +43,6 @@ export default function Page() {
           // winningSegment="Team G"
           onFinished={async (winner) => {
             setWinningSegment(winner);
-            console.log("winningId", winningSegment?.id);
             await teamRoster.refetch();
           }}
           onTeamChange={(team) => {
