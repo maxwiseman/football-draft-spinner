@@ -5,6 +5,7 @@ import { headers } from "next/headers";
 
 import { TRPCReactProvider } from "@/trpc/react";
 import { ThemeProvider } from "./_components/ui/themeProvider";
+import { AxiomWebVitals } from "next-axiom";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -24,6 +25,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
+      <AxiomWebVitals />
       <body className={`font-sans ${inter.variable}`}>
         <ThemeProvider
           attribute="class"
