@@ -17,20 +17,13 @@ export const espnRouter = createTRPCRouter({
       return data.sports[0]?.leagues[0]?.teams;
     }),
 
-  getPlayersByTeam: publicProcedure
-    .input(z.object({ teamId: z.string().min(1) }))
-    .query(() => {
-      return {
-        greeting: `Hello there`,
-      };
-    }),
-
   getTeamRoster: publicProcedure
     .input(z.object({ teamId: z.string().min(1) }))
     .query(async (input) => {
       const data = (await fetch(
         `https://site.api.espn.com/apis/site/v2/sports/football/nfl/teams/${input.input.teamId}/roster`,
       ).then((response) => response.json())) as RosterData;
+
       return data;
     }),
 });
