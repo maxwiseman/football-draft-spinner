@@ -14,7 +14,7 @@ const inter = Inter({
 export const metadata = {
   title: "Football Draft Picker",
   description: "Created by Max Wiseman and Ian Steiger",
-  icons: [{ rel: "icon", url: "/favicon.ico" }],
+  icons: [{ rel: "icon", url: "/favicon.svg" }],
 };
 
 export default function RootLayout({
