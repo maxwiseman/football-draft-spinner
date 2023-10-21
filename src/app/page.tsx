@@ -64,7 +64,7 @@ export default function Page() {
           <IconLoader className="inline-block animate-spin" /> Loading...
         </div>
       )}
-      <h1 className="mx-auto mt-6 w-max">{currentSegment}</h1>
+      <h1 className="mx-auto mt-6 min-h-[40px] w-max">{currentSegment}</h1>
     </div>
   );
 }
