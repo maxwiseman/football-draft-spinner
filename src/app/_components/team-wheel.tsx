@@ -8,6 +8,7 @@ const TeamWheelComponent = (
   {
     teams,
     winningSegment,
+    disabled,
     onFinished,
     onTeamChange,
     primaryColor = "black",
@@ -29,6 +30,7 @@ const TeamWheelComponent = (
         [key: string]: any;
       };
     };
+    disabled?: boolean;
     onFinished: (arg0: Team) => void;
     onTeamChange?: (arg0: Team) => void;
     primaryColor?: string;
@@ -42,7 +44,7 @@ const TeamWheelComponent = (
     gameWidth?: number;
     playSounds?: boolean;
   },
-  ref: Ref<{ spin: () => void }>,
+  ref?: Ref<{ spin: () => void; currentSegment: { team: Team } }>,
 ) => {
   const gameHeight = gameWidth; // * .80;
   const needleSize = gameWidth * 0.1;
@@ -71,6 +73,16 @@ const TeamWheelComponent = (
     }, 0);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
+  useEffect(() => {
+    document.addEventListener("keydown", (event) => {
+      if (event.key === "Enter") {
+        spin();
+      }
+    });
+    // eslint-disable-next-line react-hooks/exhaustive-deps -- This should only run once
+  }, []);
+
   const wheelInit = () => {
     initCanvas();
     wheelDraw();
@@ -89,6 +101,7 @@ const TeamWheelComponent = (
     canvasContext = canvas.getContext("2d");
   };
   const spin = () => {
+    if (disabled) return;
     upTime = upDuration * Math.max(Math.random() * 7, 3);
     downTime = downDuration * Math.max(Math.random() * 7, 3);
     isStarted = true;
