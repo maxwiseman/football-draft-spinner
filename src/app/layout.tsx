@@ -4,8 +4,9 @@ import { Inter } from "next/font/google";
 import { headers } from "next/headers";
 
 import { TRPCReactProvider } from "@/trpc/react";
-import { ThemeProvider } from "./_components/ui/themeProvider";
 import { AxiomWebVitals } from "next-axiom";
+import { ThemeProvider } from "./_components/ui/themeProvider";
+import Providers from "./providers";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -24,17 +25,21 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en">
+    <html lang="en" className="m-0 h-full p-0">
       <AxiomWebVitals />
-      <body className={`font-sans ${inter.variable}`}>
-        <ThemeProvider
-          attribute="class"
-          defaultTheme="system"
-          enableSystem
-          disableTransitionOnChange
-        >
-          <TRPCReactProvider headers={headers()}>{children}</TRPCReactProvider>
-        </ThemeProvider>
+      <body className={`m-0 h-full p-0 font-sans ${inter.variable}`}>
+        <Providers>
+          <ThemeProvider
+            attribute="class"
+            defaultTheme="system"
+            enableSystem
+            disableTransitionOnChange
+          >
+            <TRPCReactProvider headers={headers()}>
+              {children}
+            </TRPCReactProvider>
+          </ThemeProvider>
+        </Providers>
       </body>
     </html>
   );
