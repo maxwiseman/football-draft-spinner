@@ -1,7 +1,12 @@
 "use client";
 
 import { api } from "@/trpc/react";
-import { IconNumber, IconRuler2, IconWeight } from "@tabler/icons-react";
+import {
+  IconNumber,
+  IconPlus,
+  IconRuler2,
+  IconWeight,
+} from "@tabler/icons-react";
 import {
   Accordion,
   AccordionContent,
@@ -19,10 +24,17 @@ import {
 import { Separator } from "../_components/ui/separator";
 import { useState } from "react";
 import Image from "next/image";
+import { motion } from "framer-motion";
+import { Graduate } from "next/font/google";
+import type { Team } from "@/server/api/routers/espn";
+const graduate = Graduate({
+  weight: "400",
+  subsets: ["latin"],
+});
 
-export default function PlayerSelect({ teamId }: { teamId?: string }) {
+export default function PlayerSelect({ team }: { team?: Team }) {
   const teamRoster = api.espn.getTeamRoster.useQuery(
-    { teamId: teamId ?? "0" },
+    { teamId: team?.id ?? "0" },
     {
       refetchOnWindowFocus: false,
       refetchOnMount: false,
@@ -30,12 +42,80 @@ export default function PlayerSelect({ teamId }: { teamId?: string }) {
     },
   );
   const [accordionValue, setAccordionValue] = useState<string>("");
+  const [selectedPlayer, setSelectedPlayer] = useState<Player>();
 
   return (
     <Card
-      className={"m-6 w-full"}
+      className={"m-6 w-full overflow-hidden"}
       // style={{ backgroundColor: "#" + teamRoster.data?.team.color }}
     >
+      <motion.div
+        className="overflow-hidden"
+        initial={{ height: 0 }}
+        animate={{
+          height: accordionValue == "" && selectedPlayer ? "auto" : 0,
+        }}
+      >
+        {selectedPlayer && (
+          <>
+            <div
+              className="relative flex h-64 w-full flex-row items-center justify-between overflow-hidden"
+              style={{
+                color: `#${team?.alternateColor}`,
+                background: `#${team?.color}`,
+              }}
+            >
+              <span
+                className={`absolute left-1/2 w-[110%] -translate-x-1/2 text-lg tracking-tighter opacity-25 ${graduate.className}`}
+              >
+                {new Array(500).join(selectedPlayer.jersey + " ")}
+              </span>
+              <Image
+                className="rounded-xl object-contain"
+                src={selectedPlayer.headshot.href}
+                alt={selectedPlayer.headshot.alt}
+                fill
+              />
+            </div>
+            <CardContent className="flex flex-col pt-4">
+              <div className="flex w-full flex-row flex-nowrap items-center justify-between">
+                <div>
+                  <h2 className="line-clamp-1 border-0 !pb-0">
+                    {selectedPlayer.displayName}
+                  </h2>
+                  <h6>{selectedPlayer.position.displayName}</h6>
+                </div>
+                <Button size={"sm"}>
+                  <IconPlus className="h-4 w-4" />
+                  Add to team
+                </Button>
+              </div>
+              <Separator className="mb-4 mt-2" />
+              <div className="flex max-h-24 min-w-max flex-col flex-wrap gap-x-2 pr-2 leading-5 text-muted-foreground">
+                <div className="flex flex-row items-center gap-1">
+                  <IconNumber className="inline-block h-4 w-4" />
+                  <span>
+                    Jersey: {selectedPlayer.jersey} <br />
+                  </span>
+                </div>
+                <div className="flex flex-row items-center gap-1">
+                  <IconWeight className="inline-block h-4 w-4" />
+                  <span>
+                    Weight: {selectedPlayer.displayWeight} <br />
+                  </span>
+                </div>
+                <div className="flex flex-row items-center gap-1">
+                  <IconRuler2 className="inline-block h-4 w-4" />
+                  <span>
+                    Height: {selectedPlayer.displayHeight} <br />
+                  </span>
+                </div>
+              </div>
+            </CardContent>
+          </>
+        )}
+        <Separator />
+      </motion.div>
       <CardTitle className="m-4 flex flex-row items-center gap-2">
         <Image
           height={40}
@@ -150,6 +230,7 @@ export default function PlayerSelect({ teamId }: { teamId?: string }) {
           <Button
             onClick={() => {
               setAccordionValue("");
+              setSelectedPlayer(player);
             }}
             variant={"outline"}
             size={"sm"}

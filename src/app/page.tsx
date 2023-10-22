@@ -1,9 +1,9 @@
 "use client";
 
+import type { Team } from "@/server/api/routers/espn";
 import { useEffect, useState } from "react";
-import TeamSelection from "./stages/team-selection";
 import PlayerSelect from "./stages/player-select";
-import { Team } from "@/server/api/routers/espn";
+import TeamSelection from "./stages/team-selection";
 
 export default function Page() {
   // const [context, setContext] = useState<{
@@ -26,16 +26,16 @@ export default function Page() {
         //   console.log("disabled2", context);
         // }}
         onFinished={async (winner) => {
-          await new Promise((resolve) => setTimeout(resolve, 1000));
-          setStage(2);
           setTeam(winner);
+          await new Promise((resolve) => setTimeout(resolve, 1000));
           setWheelDisabled(true);
+          setStage(2);
         }}
         // disabled={context.stage != "teamSelection"}
         disabled={wheelDisabled}
       />
       <div className="flex h-full w-full flex-shrink items-center">
-        {team ? <PlayerSelect teamId={team?.id} /> : null}
+        {team ? <PlayerSelect team={team} /> : null}
       </div>
     </div>
   );

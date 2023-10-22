@@ -1,12 +1,12 @@
 "use client";
 
+import { cn } from "@/lib/utils";
 import type { Team } from "@/server/api/routers/espn";
 import { api } from "@/trpc/react";
 import { IconLoader } from "@tabler/icons-react";
 import { motion } from "framer-motion";
-import { createRef, useEffect, useState } from "react";
+import { createRef, useState } from "react";
 import TeamWheel from "../_components/team-wheel";
-import { cn } from "@/lib/utils";
 import styles from "./team-selection.module.css";
 
 export default function TeamSelection({
