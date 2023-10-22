@@ -36,7 +36,7 @@ export default function TeamSelection({
           width: !disabled ? "100%" : "25%",
         }}
         className={cn(
-          "flex h-full w-full min-w-[320px] flex-col items-center justify-center",
+          "flex h-full w-full min-w-[320px] flex-shrink-0 flex-col items-center justify-center",
           disabled && styles.noClickWheel,
         )}
       >
