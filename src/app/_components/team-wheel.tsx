@@ -8,7 +8,7 @@ const TeamWheelComponent = (
   {
     teams,
     winningSegment,
-    disabled,
+    disabled = false,
     onFinished,
     onTeamChange,
     primaryColor = "black",
@@ -31,7 +31,7 @@ const TeamWheelComponent = (
       };
     };
     disabled?: boolean;
-    onFinished: (arg0: Team) => void;
+    onFinished?: (arg0: Team) => void;
     onTeamChange?: (arg0: Team) => void;
     primaryColor?: string;
     contrastColor?: string;
@@ -74,15 +74,6 @@ const TeamWheelComponent = (
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  useEffect(() => {
-    document.addEventListener("keydown", (event) => {
-      if (event.key === "Enter") {
-        spin();
-      }
-    });
-    // eslint-disable-next-line react-hooks/exhaustive-deps -- This should only run once
-  }, []);
-
   const wheelInit = () => {
     initCanvas();
     wheelDraw();
@@ -101,7 +92,6 @@ const TeamWheelComponent = (
     canvasContext = canvas.getContext("2d");
   };
   const spin = () => {
-    if (disabled) return;
     upTime = upDuration * Math.max(Math.random() * 7, 3);
     downTime = downDuration * Math.max(Math.random() * 7, 3);
     isStarted = true;
@@ -159,7 +149,7 @@ const TeamWheelComponent = (
     while (angleCurrent >= Math.PI * 2) angleCurrent -= Math.PI * 2;
     if (finished) {
       setFinished(true);
-      onFinished(currentSegment.team);
+      if (onFinished) onFinished(currentSegment.team);
       clearInterval(timerHandle);
       timerHandle = 0;
       angleDelta = 0;
@@ -287,9 +277,7 @@ const TeamWheelComponent = (
         id="canvas"
         width={gameWidth}
         height={gameHeight}
-        style={{
-          pointerEvents: isFinished && isOnlyOnce ? "none" : "auto",
-        }}
+        className="pointer-events-auto"
       />
     </div>
   );
