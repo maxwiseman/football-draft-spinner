@@ -42,6 +42,7 @@ export default function PlayerSelect({ team }: { team?: Team }) {
     },
   );
   const [accordionValue, setAccordionValue] = useState<string>("");
+  const [showPlayer, setShowPlayer] = useState<boolean>(false);
   const [selectedPlayer, setSelectedPlayer] = useState<Player>();
 
   return (
@@ -53,7 +54,7 @@ export default function PlayerSelect({ team }: { team?: Team }) {
         className="overflow-hidden"
         initial={{ height: 0 }}
         animate={{
-          height: accordionValue == "" && selectedPlayer ? "auto" : 0,
+          height: showPlayer ? "auto" : 0,
         }}
       >
         {selectedPlayer && (
@@ -66,9 +67,9 @@ export default function PlayerSelect({ team }: { team?: Team }) {
               }}
             >
               <span
-                className={`absolute left-1/2 w-[110%] -translate-x-1/2 text-lg tracking-tighter opacity-25 ${graduate.className}`}
+                className={`absolute left-1/2 w-[110%] -translate-x-1/2 text-lg tracking-tighter text-white opacity-25 ${graduate.className}`}
               >
-                {new Array(500).join(selectedPlayer.jersey + " ")}
+                {new Array(1000).join(selectedPlayer.jersey + " ")}
               </span>
               <Image
                 className="rounded-xl object-contain"
@@ -116,7 +117,13 @@ export default function PlayerSelect({ team }: { team?: Team }) {
         )}
         <Separator />
       </motion.div>
-      <CardTitle className="m-4 flex flex-row items-center gap-2">
+      <CardTitle
+        onClick={() => {
+          if (showPlayer) setShowPlayer(false);
+          if (!showPlayer && selectedPlayer) setShowPlayer(true);
+        }}
+        className="m-4 flex cursor-pointer flex-row items-center gap-2"
+      >
         <Image
           height={40}
           width={40}
@@ -126,60 +133,65 @@ export default function PlayerSelect({ team }: { team?: Team }) {
         />
         {teamRoster.data?.team.displayName}
       </CardTitle>
-      <Separator />
-      <CardContent className="mt-4 space-y-2">
-        <Accordion
-          value={accordionValue}
-          onValueChange={(value) => {
-            setAccordionValue(value);
-          }}
-          type="single"
-          collapsible
-        >
-          <AccordionItem value="offense">
-            <AccordionTrigger className="font-semibold">
-              Offense
-            </AccordionTrigger>
-            <AccordionContent>
-              <div className="my-4 flex flex-row flex-wrap justify-center gap-1">
-                {teamRoster.data
-                  ? teamRoster.data.athletes[0]?.items.map((player) => {
-                      return <Player key={player.id} player={player} />;
-                    })
-                  : null}
-              </div>
-            </AccordionContent>
-          </AccordionItem>
-          <AccordionItem value="defense">
-            <AccordionTrigger className="font-semibold">
-              Defense
-            </AccordionTrigger>
-            <AccordionContent>
-              <div className="my-4 flex flex-row flex-wrap justify-center gap-1">
-                {teamRoster.data
-                  ? teamRoster.data.athletes[0]?.items.map((player) => {
-                      return <Player key={player.id} player={player} />;
-                    })
-                  : null}
-              </div>
-            </AccordionContent>
-          </AccordionItem>
-          <AccordionItem className="border-b-0" value="special">
-            <AccordionTrigger className="font-semibold">
-              Special
-            </AccordionTrigger>
-            <AccordionContent>
-              <div className="my-4 flex flex-row flex-wrap justify-center gap-1">
-                {teamRoster.data
-                  ? teamRoster.data.athletes[0]?.items.map((player) => {
-                      return <Player key={player.id} player={player} />;
-                    })
-                  : null}
-              </div>
-            </AccordionContent>
-          </AccordionItem>
-        </Accordion>
-      </CardContent>
+      <motion.div
+        initial={{ height: "min-content" }}
+        animate={{ height: showPlayer ? 0 : "min-content" }}
+      >
+        <Separator />
+        <CardContent className="mt-4 space-y-2">
+          <Accordion
+            // value={accordionValue}
+            // onValueChange={(value) => {
+            //   setAccordionValue(value);
+            // }}
+            type="single"
+            collapsible
+          >
+            <AccordionItem value="offense">
+              <AccordionTrigger className="font-semibold">
+                Offense
+              </AccordionTrigger>
+              <AccordionContent>
+                <div className="my-4 flex flex-row flex-wrap justify-center gap-1">
+                  {teamRoster.data
+                    ? teamRoster.data.athletes[0]?.items.map((player) => {
+                        return <Player key={player.id} player={player} />;
+                      })
+                    : null}
+                </div>
+              </AccordionContent>
+            </AccordionItem>
+            <AccordionItem value="defense">
+              <AccordionTrigger className="font-semibold">
+                Defense
+              </AccordionTrigger>
+              <AccordionContent>
+                <div className="my-4 flex flex-row flex-wrap justify-center gap-1">
+                  {teamRoster.data
+                    ? teamRoster.data.athletes[0]?.items.map((player) => {
+                        return <Player key={player.id} player={player} />;
+                      })
+                    : null}
+                </div>
+              </AccordionContent>
+            </AccordionItem>
+            <AccordionItem className="border-b-0" value="special">
+              <AccordionTrigger className="font-semibold">
+                Special
+              </AccordionTrigger>
+              <AccordionContent>
+                <div className="my-4 flex flex-row flex-wrap justify-center gap-1">
+                  {teamRoster.data
+                    ? teamRoster.data.athletes[0]?.items.map((player) => {
+                        return <Player key={player.id} player={player} />;
+                      })
+                    : null}
+                </div>
+              </AccordionContent>
+            </AccordionItem>
+          </Accordion>
+        </CardContent>
+      </motion.div>
     </Card>
   );
   function Player({ player }: { player: Player }) {
@@ -229,7 +241,7 @@ export default function PlayerSelect({ team }: { team?: Team }) {
         <HoverCardTrigger>
           <Button
             onClick={() => {
-              setAccordionValue("");
+              setShowPlayer(true);
               setSelectedPlayer(player);
             }}
             variant={"outline"}
