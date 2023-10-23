@@ -14,7 +14,6 @@ const TeamWheelComponent = (
     primaryColor = "black",
     contrastColor = "white",
     buttonText = "Spin",
-    isOnlyOnce = true,
     size = 290,
     upDuration = 100,
     downDuration = 1000,
@@ -36,7 +35,6 @@ const TeamWheelComponent = (
     primaryColor?: string;
     contrastColor?: string;
     buttonText?: string;
-    isOnlyOnce?: boolean;
     size?: number;
     upDuration?: number;
     downDuration?: number;
@@ -52,7 +50,7 @@ const TeamWheelComponent = (
   let currentSegment: { team: Team };
   let lastSegment: { team: Team };
   let isStarted = false;
-  const [isFinished, setFinished] = useState(false);
+  const [isFinished, setFinished] = useState(true);
   let timerHandle = 0;
   const timerDelay = teams.length;
   let angleCurrent = 0;
@@ -88,19 +86,22 @@ const TeamWheelComponent = (
       canvas.setAttribute("id", "canvas");
       document.getElementById("wheel")?.appendChild(canvas);
     }
-    canvas?.addEventListener("click", spin, false);
+    // canvas?.addEventListener("click", spin, false);
     canvasContext = canvas.getContext("2d");
   };
   const spin = () => {
-    upTime = upDuration * Math.max(Math.random() * 7, 3);
-    downTime = downDuration * Math.max(Math.random() * 7, 3);
-    isStarted = true;
-    if (timerHandle === 0) {
-      spinStart = new Date().getTime();
-      // maxSpeed = Math.PI / ((teams.length*2) + Math.random())
-      maxSpeed = 0.2;
-      frames = 0;
-      timerHandle = setInterval(onTimerTick, timerDelay) as unknown as number;
+    if (!disabled && isFinished === true) {
+      setFinished(false);
+      upTime = upDuration * Math.max(Math.random() * 7, 3);
+      downTime = downDuration * Math.max(Math.random() * 7, 3);
+      isStarted = true;
+      if (timerHandle === 0) {
+        spinStart = new Date().getTime();
+        // maxSpeed = Math.PI / ((teams.length*2) + Math.random())
+        maxSpeed = 0.2;
+        frames = 0;
+        timerHandle = setInterval(onTimerTick, timerDelay) as unknown as number;
+      }
     }
   };
   const onTimerTick = () => {
@@ -274,6 +275,7 @@ const TeamWheelComponent = (
   return (
     <div id="wheel">
       <canvas
+        onClick={spin}
         id="canvas"
         width={gameWidth}
         height={gameHeight}

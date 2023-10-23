@@ -1,5 +1,6 @@
 "use client";
 
+import type { Team } from "@/server/api/routers/espn";
 import { api } from "@/trpc/react";
 import {
   IconNumber,
@@ -7,6 +8,10 @@ import {
   IconRuler2,
   IconWeight,
 } from "@tabler/icons-react";
+import { motion } from "framer-motion";
+import { Graduate } from "next/font/google";
+import Image from "next/image";
+import { useContext, useState } from "react";
 import {
   Accordion,
   AccordionContent,
@@ -22,11 +27,7 @@ import {
   HoverCardTrigger,
 } from "../_components/ui/hover-card";
 import { Separator } from "../_components/ui/separator";
-import { useState } from "react";
-import Image from "next/image";
-import { motion } from "framer-motion";
-import { Graduate } from "next/font/google";
-import type { Team } from "@/server/api/routers/espn";
+import { team as TeamContext } from "../providers";
 const graduate = Graduate({
   weight: "400",
   subsets: ["latin"],
@@ -41,7 +42,7 @@ export default function PlayerSelect({ team }: { team?: Team }) {
       refetchOnReconnect: false,
     },
   );
-  const [accordionValue, setAccordionValue] = useState<string>("");
+  const teamContext = useContext(TeamContext);
   const [showPlayer, setShowPlayer] = useState<boolean>(false);
   const [selectedPlayer, setSelectedPlayer] = useState<Player>();
 
@@ -73,8 +74,9 @@ export default function PlayerSelect({ team }: { team?: Team }) {
               </span>
               <Image
                 className="rounded-xl object-contain"
-                src={selectedPlayer.headshot.href}
-                alt={selectedPlayer.headshot.alt}
+                src={selectedPlayer.headshot.href ?? ""}
+                alt={selectedPlayer.headshot.alt ?? ""}
+                quality={100}
                 fill
               />
             </div>
@@ -124,14 +126,17 @@ export default function PlayerSelect({ team }: { team?: Team }) {
         }}
         className="m-4 flex cursor-pointer flex-row items-center gap-2"
       >
-        <Image
-          height={40}
-          width={40}
-          alt={teamRoster.data?.team.abbreviation + " Logo"}
-          src={teamRoster.data?.team.logo ?? ""}
-          className="aspect-square h-10"
-        />
-        {teamRoster.data?.team.displayName}
+        {teamRoster.isFetched && (
+          <Image
+            height={40}
+            width={40}
+            alt={teamRoster.data?.team.abbreviation + " Logo"}
+            src={teamRoster.data?.team.logo ?? ""}
+            className="aspect-square h-10"
+            quality={50}
+          />
+        )}
+        {teamRoster.data?.team.displayName ?? "Loading..."}
       </CardTitle>
       <motion.div
         initial={{ height: "min-content" }}
@@ -168,7 +173,7 @@ export default function PlayerSelect({ team }: { team?: Team }) {
               <AccordionContent>
                 <div className="my-4 flex flex-row flex-wrap justify-center gap-1">
                   {teamRoster.data
-                    ? teamRoster.data.athletes[0]?.items.map((player) => {
+                    ? teamRoster.data.athletes[1]?.items.map((player) => {
                         return <Player key={player.id} player={player} />;
                       })
                     : null}
@@ -182,7 +187,7 @@ export default function PlayerSelect({ team }: { team?: Team }) {
               <AccordionContent>
                 <div className="my-4 flex flex-row flex-wrap justify-center gap-1">
                   {teamRoster.data
-                    ? teamRoster.data.athletes[0]?.items.map((player) => {
+                    ? teamRoster.data.athletes[2]?.items.map((player) => {
                         return <Player key={player.id} player={player} />;
                       })
                     : null}
@@ -196,7 +201,7 @@ export default function PlayerSelect({ team }: { team?: Team }) {
   );
   function Player({ player }: { player: Player }) {
     return (
-      <HoverCard openDelay={1000}>
+      <HoverCard>
         <HoverCardContent className=" flex max-h-min w-max min-w-[20rem] flex-row flex-nowrap gap-2">
           <Avatar className="inline-block h-12 w-auto">
             <AvatarImage
@@ -204,9 +209,18 @@ export default function PlayerSelect({ team }: { team?: Team }) {
               style={{
                 background: "#" + teamRoster.data?.team.color,
               }}
-              src={player.headshot.href}
-              alt={player.headshot.alt}
-            />
+              src={player.headshot.href ?? ""}
+              alt={player.headshot.alt ?? ""}
+              asChild
+            >
+              <Image
+                src={player.headshot.href ?? ""}
+                alt={player.headshot.alt ?? ""}
+                width={48}
+                height={48}
+                quality={100}
+              />
+            </AvatarImage>
             <AvatarFallback className="aspect-square">
               {player.firstName.charAt(0) + player.lastName.charAt(0)}
             </AvatarFallback>
@@ -253,8 +267,9 @@ export default function PlayerSelect({ team }: { team?: Team }) {
                 className="rounded-sm object-cover"
                 height={28}
                 width={28}
-                src={player.headshot.href}
-                alt={player.headshot.alt}
+                src={player.headshot.href ?? ""}
+                alt={player.headshot.alt ?? ""}
+                quality={25}
               />
             </div>
           </Button>

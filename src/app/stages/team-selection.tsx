@@ -12,10 +12,13 @@ import styles from "./team-selection.module.css";
 export default function TeamSelection({
   onFinished,
   disabled,
+  stage,
 }: {
   onFinished?: (arg0: Team) => void;
   disabled?: boolean;
+  stage?: number;
 }) {
+  const shrunk: boolean = stage !== 1;
   const teams = api.espn.getTeams.useQuery(undefined, {
     refetchOnWindowFocus: false,
     refetchOnMount: false,
@@ -33,7 +36,7 @@ export default function TeamSelection({
           width: "100%",
         }}
         animate={{
-          width: !disabled ? "100%" : "25%",
+          width: !shrunk ? "100%" : "25%",
         }}
         className={cn(
           "flex h-full w-full min-w-[320px] flex-shrink-0 flex-col items-center justify-center",
@@ -47,7 +50,7 @@ export default function TeamSelection({
             scale: 1,
           }}
           animate={{
-            scale: !disabled ? 1 : 0.5,
+            scale: !shrunk ? 1 : 0.5,
           }}
         >
           <TeamWheel
@@ -60,12 +63,12 @@ export default function TeamSelection({
             primaryColor="black"
             contrastColor="white"
             buttonText="Spin"
-            isOnlyOnce={false}
             size={300}
             gameWidth={620}
             upDuration={100}
             downDuration={1000}
             fontFamily="Arial"
+            disabled={disabled}
             // ref={WheelRef}
           />
           <h1 className="mx-auto mt-6 min-h-[40px] w-max">{currentSegment}</h1>
@@ -73,7 +76,7 @@ export default function TeamSelection({
       </motion.div>
     );
   return (
-    <div className="flex h-full w-full flex-row items-center justify-center gap-2">
+    <div className="flex h-full w-full flex-shrink-0 flex-row items-center justify-center gap-2">
       <IconLoader className="inline-block animate-spin" /> Loading...
     </div>
   );

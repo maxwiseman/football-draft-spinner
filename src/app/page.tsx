@@ -27,12 +27,13 @@ export default function Page() {
         // }}
         onFinished={async (winner) => {
           setTeam(winner);
-          await new Promise((resolve) => setTimeout(resolve, 1000));
           setWheelDisabled(true);
+          await new Promise((resolve) => setTimeout(resolve, 1000));
           setStage(2);
         }}
         // disabled={context.stage != "teamSelection"}
         disabled={wheelDisabled}
+        stage={stage}
       />
       <div className="flex h-full w-full flex-shrink items-center">
         {team ? <PlayerSelect team={team} /> : null}
