@@ -36,7 +36,15 @@ export default function Page() {
         stage={stage}
       />
       <div className="flex h-full w-full flex-shrink items-center">
-        {team ? <PlayerSelect team={team} /> : null}
+        {team ? (
+          <PlayerSelect
+            onSelect={(player) => {
+              setStage(1);
+              setWheelDisabled(false);
+            }}
+            team={team}
+          />
+        ) : null}
       </div>
     </div>
   );

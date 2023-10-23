@@ -7,7 +7,6 @@ import { IconLoader } from "@tabler/icons-react";
 import { motion } from "framer-motion";
 import { createRef, useState } from "react";
 import TeamWheel from "../_components/team-wheel";
-import styles from "./team-selection.module.css";
 
 export default function TeamSelection({
   onFinished,
@@ -40,7 +39,6 @@ export default function TeamSelection({
         }}
         className={cn(
           "flex h-full w-full min-w-[320px] flex-shrink-0 flex-col items-center justify-center",
-          disabled && styles.noClickWheel,
         )}
       >
         <motion.div

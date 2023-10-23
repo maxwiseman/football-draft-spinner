@@ -52,8 +52,9 @@ const TeamWheelComponent = (
   let isStarted = false;
   const [isFinished, setFinished] = useState(true);
   let timerHandle = 0;
-  const timerDelay = teams.length;
+  const timerDelay = 32;
   let angleCurrent = 0;
+  const [savedAngle, setSavedAngle] = useState(0);
   let angleDelta = 0;
   let canvasContext: CanvasRenderingContext2D | null;
   let maxSpeed = 1;
@@ -78,6 +79,7 @@ const TeamWheelComponent = (
   };
 
   const initCanvas = () => {
+    angleCurrent = savedAngle;
     let canvas = document.getElementById("canvas") as HTMLCanvasElement;
     if (navigator.userAgent.indexOf("MSIE") !== -1) {
       canvas = document.createElement("canvas");
@@ -86,11 +88,11 @@ const TeamWheelComponent = (
       canvas.setAttribute("id", "canvas");
       document.getElementById("wheel")?.appendChild(canvas);
     }
-    // canvas?.addEventListener("click", spin, false);
     canvasContext = canvas.getContext("2d");
   };
   const spin = () => {
     if (!disabled && isFinished === true) {
+      initCanvas();
       setFinished(false);
       upTime = upDuration * Math.max(Math.random() * 7, 3);
       downTime = downDuration * Math.max(Math.random() * 7, 3);
@@ -150,10 +152,11 @@ const TeamWheelComponent = (
     while (angleCurrent >= Math.PI * 2) angleCurrent -= Math.PI * 2;
     if (finished) {
       setFinished(true);
-      if (onFinished) onFinished(currentSegment.team);
+      if (onFinished && currentSegment?.team) onFinished(currentSegment.team);
       clearInterval(timerHandle);
       timerHandle = 0;
       angleDelta = 0;
+      setSavedAngle(angleCurrent);
     }
   };
 

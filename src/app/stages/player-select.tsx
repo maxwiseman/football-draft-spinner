@@ -11,7 +11,7 @@ import {
 import { motion } from "framer-motion";
 import { Graduate } from "next/font/google";
 import Image from "next/image";
-import { useContext, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import {
   Accordion,
   AccordionContent,
@@ -28,12 +28,20 @@ import {
 } from "../_components/ui/hover-card";
 import { Separator } from "../_components/ui/separator";
 import { team as TeamContext } from "../providers";
+import { ChevronDownIcon } from "@radix-ui/react-icons";
+import { cn } from "@/lib/utils";
 const graduate = Graduate({
   weight: "400",
   subsets: ["latin"],
 });
 
-export default function PlayerSelect({ team }: { team?: Team }) {
+export default function PlayerSelect({
+  team,
+  onSelect,
+}: {
+  team?: Team;
+  onSelect: (arg0: Player) => void;
+}) {
   const teamRoster = api.espn.getTeamRoster.useQuery(
     { teamId: team?.id ?? "0" },
     {
@@ -45,6 +53,11 @@ export default function PlayerSelect({ team }: { team?: Team }) {
   const teamContext = useContext(TeamContext);
   const [showPlayer, setShowPlayer] = useState<boolean>(false);
   const [selectedPlayer, setSelectedPlayer] = useState<Player>();
+
+  useEffect(() => {
+    setSelectedPlayer(undefined);
+    setShowPlayer(false);
+  }, [team]);
 
   return (
     <Card
@@ -88,7 +101,12 @@ export default function PlayerSelect({ team }: { team?: Team }) {
                   </h2>
                   <h6>{selectedPlayer.position.displayName}</h6>
                 </div>
-                <Button size={"sm"}>
+                <Button
+                  size={"sm"}
+                  onClick={() => {
+                    onSelect(selectedPlayer);
+                  }}
+                >
                   <IconPlus className="h-4 w-4" />
                   Add to team
                 </Button>
@@ -136,7 +154,13 @@ export default function PlayerSelect({ team }: { team?: Team }) {
             quality={50}
           />
         )}
-        {teamRoster.data?.team.displayName ?? "Loading..."}
+        {teamRoster.data?.team.displayName ?? "Loading..."}{" "}
+        <ChevronDownIcon
+          className={cn(
+            "tranistion-transform ml-auto h-5 w-5 text-muted-foreground",
+            showPlayer ? "rotate-180" : "rotate-0",
+          )}
+        />
       </CardTitle>
       <motion.div
         initial={{ height: "min-content" }}
