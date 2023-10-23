@@ -142,7 +142,7 @@ export default function PlayerSelect({
           if (showPlayer) setShowPlayer(false);
           if (!showPlayer && selectedPlayer) setShowPlayer(true);
         }}
-        className="m-4 flex cursor-pointer flex-row items-center gap-2"
+        className="flex cursor-pointer flex-row items-center gap-2 p-4"
       >
         {teamRoster.isFetched && (
           <Image
@@ -157,8 +157,8 @@ export default function PlayerSelect({
         {teamRoster.data?.team.displayName ?? "Loading..."}{" "}
         <ChevronDownIcon
           className={cn(
-            "tranistion-transform ml-auto h-5 w-5 text-muted-foreground",
-            showPlayer ? "rotate-180" : "rotate-0",
+            "tranistion-transform ml-auto h-5 w-5 text-muted-foreground duration-200",
+            showPlayer ? "rotate-0" : "rotate-180",
           )}
         />
       </CardTitle>
@@ -224,82 +224,83 @@ export default function PlayerSelect({
     </Card>
   );
   function Player({ player }: { player: Player }) {
-    return (
-      <HoverCard>
-        <HoverCardContent className=" flex max-h-min w-max min-w-[20rem] flex-row flex-nowrap gap-2">
-          <Avatar className="inline-block h-12 w-auto">
-            <AvatarImage
-              className="aspect-square object-cover"
-              style={{
-                background: "#" + teamRoster.data?.team.color,
+    if (player.status.id != "1" || "13")
+      return (
+        <HoverCard>
+          <HoverCardContent className=" flex max-h-min w-max min-w-[20rem] flex-row flex-nowrap gap-2">
+            <Avatar className="inline-block h-12 w-auto">
+              <AvatarImage
+                className="aspect-square object-cover"
+                style={{
+                  background: "#" + teamRoster.data?.team.color,
+                }}
+                src={player.headshot.href ?? ""}
+                alt={player.headshot.alt ?? ""}
+                asChild
+              >
+                <Image
+                  src={player.headshot.href ?? ""}
+                  alt={player.headshot.alt ?? ""}
+                  width={48}
+                  height={48}
+                  quality={100}
+                />
+              </AvatarImage>
+              <AvatarFallback className="aspect-square">
+                {player.firstName.charAt(0) + player.lastName.charAt(0)}
+              </AvatarFallback>
+            </Avatar>
+            <div className="flex h-max max-h-60 min-h-max min-w-max flex-col gap-2">
+              <div>
+                <h4>{player.fullName}</h4>
+                <h6>{player.position.displayName}</h6>
+              </div>
+              <div className="!mt-0 flex max-h-24 min-w-max flex-col flex-wrap gap-x-2 pr-2 leading-5 text-muted-foreground">
+                <div className="flex flex-row items-center gap-1">
+                  <IconNumber className="inline-block h-4 w-4" />
+                  <span>
+                    Jersey: {player.jersey} <br />
+                  </span>
+                </div>
+                <div className="flex flex-row items-center gap-1">
+                  <IconWeight className="inline-block h-4 w-4" />
+                  <span>
+                    Weight: {player.displayWeight} <br />
+                  </span>
+                </div>
+                <div className="flex flex-row items-center gap-1">
+                  <IconRuler2 className="inline-block h-4 w-4" />
+                  <span>
+                    Height: {player.displayHeight} <br />
+                  </span>
+                </div>
+              </div>
+            </div>
+          </HoverCardContent>
+          <HoverCardTrigger>
+            <Button
+              onClick={() => {
+                setShowPlayer(true);
+                setSelectedPlayer(player);
               }}
-              src={player.headshot.href ?? ""}
-              alt={player.headshot.alt ?? ""}
-              asChild
+              variant={"outline"}
+              size={"sm"}
+              className="h-min p-1"
             >
-              <Image
-                src={player.headshot.href ?? ""}
-                alt={player.headshot.alt ?? ""}
-                width={48}
-                height={48}
-                quality={100}
-              />
-            </AvatarImage>
-            <AvatarFallback className="aspect-square">
-              {player.firstName.charAt(0) + player.lastName.charAt(0)}
-            </AvatarFallback>
-          </Avatar>
-          <div className="flex h-max max-h-60 min-h-max min-w-max flex-col gap-2">
-            <div>
-              <h4>{player.fullName}</h4>
-              <h6>{player.position.displayName}</h6>
-            </div>
-            <div className="!mt-0 flex max-h-24 min-w-max flex-col flex-wrap gap-x-2 pr-2 leading-5 text-muted-foreground">
-              <div className="flex flex-row items-center gap-1">
-                <IconNumber className="inline-block h-4 w-4" />
-                <span>
-                  Jersey: {player.jersey} <br />
-                </span>
+              <div className="flex aspect-square h-7 items-center justify-center">
+                <Image
+                  className="rounded-sm object-cover"
+                  height={28}
+                  width={28}
+                  src={player.headshot.href ?? ""}
+                  alt={player.headshot.alt ?? ""}
+                  quality={25}
+                />
               </div>
-              <div className="flex flex-row items-center gap-1">
-                <IconWeight className="inline-block h-4 w-4" />
-                <span>
-                  Weight: {player.displayWeight} <br />
-                </span>
-              </div>
-              <div className="flex flex-row items-center gap-1">
-                <IconRuler2 className="inline-block h-4 w-4" />
-                <span>
-                  Height: {player.displayHeight} <br />
-                </span>
-              </div>
-            </div>
-          </div>
-        </HoverCardContent>
-        <HoverCardTrigger>
-          <Button
-            onClick={() => {
-              setShowPlayer(true);
-              setSelectedPlayer(player);
-            }}
-            variant={"outline"}
-            size={"sm"}
-            className="h-min p-1"
-          >
-            <div className="flex aspect-square h-7 items-center justify-center">
-              <Image
-                className="rounded-sm object-cover"
-                height={28}
-                width={28}
-                src={player.headshot.href ?? ""}
-                alt={player.headshot.alt ?? ""}
-                quality={25}
-              />
-            </div>
-          </Button>
-        </HoverCardTrigger>
-      </HoverCard>
-    );
+            </Button>
+          </HoverCardTrigger>
+        </HoverCard>
+      );
   }
 }
 
