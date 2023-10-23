@@ -85,13 +85,15 @@ export default function PlayerSelect({
               >
                 {new Array(1000).join(selectedPlayer.jersey + " ")}
               </span>
-              <Image
-                className="rounded-xl object-contain"
-                src={selectedPlayer.headshot.href ?? ""}
-                alt={selectedPlayer.headshot.alt ?? ""}
-                quality={100}
-                fill
-              />
+              {selectedPlayer.headshot ? (
+                <Image
+                  className="rounded-xl object-contain"
+                  src={selectedPlayer.headshot.href ?? ""}
+                  alt={selectedPlayer.headshot.alt ?? ""}
+                  quality={100}
+                  fill
+                />
+              ) : null}
             </div>
             <CardContent className="flex flex-col pt-4">
               <div className="flex w-full flex-row flex-nowrap items-center justify-between">
@@ -229,23 +231,25 @@ export default function PlayerSelect({
         <HoverCard>
           <HoverCardContent className=" flex max-h-min w-max min-w-[20rem] flex-row flex-nowrap gap-2">
             <Avatar className="inline-block h-12 w-auto">
-              <AvatarImage
-                className="aspect-square object-cover"
-                style={{
-                  background: "#" + teamRoster.data?.team.color,
-                }}
-                src={player.headshot.href ?? ""}
-                alt={player.headshot.alt ?? ""}
-                asChild
-              >
-                <Image
+              {player.headshot ? (
+                <AvatarImage
+                  className="aspect-square object-cover"
+                  style={{
+                    background: "#" + teamRoster.data?.team.color,
+                  }}
                   src={player.headshot.href ?? ""}
                   alt={player.headshot.alt ?? ""}
-                  width={48}
-                  height={48}
-                  quality={100}
-                />
-              </AvatarImage>
+                  asChild
+                >
+                  <Image
+                    src={player.headshot.href ?? ""}
+                    alt={player.headshot.alt ?? ""}
+                    width={48}
+                    height={48}
+                    quality={100}
+                  />
+                </AvatarImage>
+              ) : null}
               <AvatarFallback className="aspect-square">
                 {player.firstName.charAt(0) + player.lastName.charAt(0)}
               </AvatarFallback>
@@ -288,14 +292,16 @@ export default function PlayerSelect({
               className="h-min p-1"
             >
               <div className="flex aspect-square h-7 items-center justify-center">
-                <Image
-                  className="rounded-sm object-cover"
-                  height={28}
-                  width={28}
-                  src={player.headshot.href ?? ""}
-                  alt={player.headshot.alt ?? ""}
-                  quality={25}
-                />
+                {player.headshot ? (
+                  <Image
+                    className="rounded-sm object-cover"
+                    height={28}
+                    width={28}
+                    src={player.headshot.href ?? ""}
+                    alt={player.headshot.alt ?? ""}
+                    quality={25}
+                  />
+                ) : null}
               </div>
             </Button>
           </HoverCardTrigger>
@@ -344,7 +350,7 @@ interface Player {
     abbrev: string;
   };
   slug: string;
-  headshot: {
+  headshot?: {
     href: string;
     alt: string;
   };
