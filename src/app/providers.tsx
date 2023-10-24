@@ -1,10 +1,34 @@
 "use client";
 
 import { AnimatePresence } from "framer-motion";
-import { createContext, type ReactNode } from "react";
+import {
+  createContext,
+  useState,
+  type ReactNode,
+  Dispatch,
+  SetStateAction,
+} from "react";
+import type { Player } from "./stages/player-select";
 
-export const team = createContext("This is the team context");
+// export const team = createContext<Player[]>([]);
+export const TeamContext = createContext<{
+  team: Player[];
+  setTeam: Dispatch<SetStateAction<Player[]>>;
+}>({
+  team: [],
+  setTeam: () => {
+    console.error("Something went wrong!");
+  },
+});
 
 export default function Providers({ children }: { children: ReactNode }) {
-  return <AnimatePresence>{children}</AnimatePresence>;
+  const [team, setTeam] = useState<Player[]>([]);
+
+  return (
+    <AnimatePresence>
+      <TeamContext.Provider value={{ team, setTeam }}>
+        {children}
+      </TeamContext.Provider>
+    </AnimatePresence>
+  );
 }

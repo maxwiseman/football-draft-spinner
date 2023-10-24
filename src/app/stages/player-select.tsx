@@ -28,7 +28,7 @@ import {
   HoverCardTrigger,
 } from "../_components/ui/hover-card";
 import { Separator } from "../_components/ui/separator";
-import { team as TeamContext } from "../providers";
+import { TeamContext } from "../providers";
 import { ChevronDownIcon } from "@radix-ui/react-icons";
 import { cn } from "@/lib/utils";
 const graduate = Graduate({
@@ -51,7 +51,8 @@ export default function PlayerSelect({
       refetchOnReconnect: false,
     },
   );
-  const teamContext = useContext(TeamContext);
+  const { team: teamContext, setTeam: setTeamContext } =
+    useContext(TeamContext);
   const [expanded, setExpanded] = useState<"player" | "team" | "yourTeam">(
     "team",
   );
@@ -110,6 +111,7 @@ export default function PlayerSelect({
                   size={"sm"}
                   onClick={() => {
                     onSelect(selectedPlayer);
+                    setTeamContext([...teamContext, selectedPlayer]);
                   }}
                 >
                   <IconPlus className="h-4 w-4" />
@@ -144,8 +146,8 @@ export default function PlayerSelect({
       </motion.div>
       <CardTitle
         onClick={() => {
-          if (expanded == "player") setExpanded("team");
-          if (expanded != "player" && selectedPlayer) setExpanded("team");
+          if (expanded != "team") setExpanded("team");
+          if (expanded == "team" && selectedPlayer) setExpanded("player");
         }}
         className="flex cursor-pointer flex-row items-center gap-2 p-4"
       >
@@ -173,15 +175,8 @@ export default function PlayerSelect({
         animate={{ height: expanded == "team" ? "min-content" : 0 }}
         className="overflow-hidden"
       >
-        <CardContent className="mt-4 space-y-2">
-          <Accordion
-            // value={accordionValue}
-            // onValueChange={(value) => {
-            //   setAccordionValue(value);
-            // }}
-            type="single"
-            collapsible
-          >
+        <CardContent className="space-y-2 p-6">
+          <Accordion type="single" collapsible>
             <AccordionItem value="offense">
               <AccordionTrigger className="font-semibold">
                 Offense
@@ -253,6 +248,13 @@ export default function PlayerSelect({
         animate={{ height: expanded == "yourTeam" ? "min-content" : 0 }}
       >
         <Separator />
+        <CardContent className="p-6">
+          <div className="flex flex-row flex-wrap justify-center gap-1">
+            {teamContext?.map((player) => {
+              return <Player key={player.id} player={player} />;
+            })}
+          </div>
+        </CardContent>
       </motion.div>
     </Card>
   );
@@ -341,7 +343,7 @@ export default function PlayerSelect({
   }
 }
 
-interface Player {
+export interface Player {
   id: string;
   uid: string;
   guid: string;
