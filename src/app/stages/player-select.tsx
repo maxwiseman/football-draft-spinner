@@ -6,6 +6,7 @@ import {
   IconNumber,
   IconPlus,
   IconRuler2,
+  IconUsers,
   IconWeight,
 } from "@tabler/icons-react";
 import { motion } from "framer-motion";
@@ -51,12 +52,14 @@ export default function PlayerSelect({
     },
   );
   const teamContext = useContext(TeamContext);
-  const [showPlayer, setShowPlayer] = useState<boolean>(false);
+  const [expanded, setExpanded] = useState<"player" | "team" | "yourTeam">(
+    "team",
+  );
   const [selectedPlayer, setSelectedPlayer] = useState<Player>();
 
   useEffect(() => {
     setSelectedPlayer(undefined);
-    setShowPlayer(false);
+    setExpanded("team");
   }, [team]);
 
   return (
@@ -68,7 +71,7 @@ export default function PlayerSelect({
         className="overflow-hidden"
         initial={{ height: 0 }}
         animate={{
-          height: showPlayer ? "auto" : 0,
+          height: expanded == "player" ? "auto" : 0,
         }}
       >
         {selectedPlayer && (
@@ -141,8 +144,8 @@ export default function PlayerSelect({
       </motion.div>
       <CardTitle
         onClick={() => {
-          if (showPlayer) setShowPlayer(false);
-          if (!showPlayer && selectedPlayer) setShowPlayer(true);
+          if (expanded == "player") setExpanded("team");
+          if (expanded != "player" && selectedPlayer) setExpanded("team");
         }}
         className="flex cursor-pointer flex-row items-center gap-2 p-4"
       >
@@ -160,15 +163,16 @@ export default function PlayerSelect({
         <ChevronDownIcon
           className={cn(
             "tranistion-transform ml-auto h-5 w-5 text-muted-foreground duration-200",
-            showPlayer ? "rotate-0" : "rotate-180",
+            expanded == "team" ? "rotate-180" : "rotate-0",
           )}
         />
       </CardTitle>
+      <Separator />
       <motion.div
         initial={{ height: "min-content" }}
-        animate={{ height: showPlayer ? 0 : "min-content" }}
+        animate={{ height: expanded == "team" ? "min-content" : 0 }}
+        className="overflow-hidden"
       >
-        <Separator />
         <CardContent className="mt-4 space-y-2">
           <Accordion
             // value={accordionValue}
@@ -222,6 +226,33 @@ export default function PlayerSelect({
             </AccordionItem>
           </Accordion>
         </CardContent>
+        <Separator />
+      </motion.div>
+      <CardTitle
+        onClick={() => {
+          if (expanded == "yourTeam") {
+            setExpanded("team");
+          }
+          if (expanded != "yourTeam") {
+            setExpanded("yourTeam");
+          }
+        }}
+        className="flex cursor-pointer flex-row items-center gap-2 p-4"
+      >
+        <IconUsers className="h-10 w-10 p-2" />
+        Your Team
+        <ChevronDownIcon
+          className={cn(
+            "tranistion-transform ml-auto h-5 w-5 text-muted-foreground duration-200",
+            expanded == "yourTeam" ? "rotate-180" : "rotate-0",
+          )}
+        />
+      </CardTitle>
+      <motion.div
+        initial={{ height: 0 }}
+        animate={{ height: expanded == "yourTeam" ? "min-content" : 0 }}
+      >
+        <Separator />
       </motion.div>
     </Card>
   );
@@ -284,7 +315,7 @@ export default function PlayerSelect({
           <HoverCardTrigger>
             <Button
               onClick={() => {
-                setShowPlayer(true);
+                setExpanded("player");
                 setSelectedPlayer(player);
               }}
               variant={"outline"}
