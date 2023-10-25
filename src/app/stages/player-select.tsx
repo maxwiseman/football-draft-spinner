@@ -1,46 +1,46 @@
-'use client';
+"use client";
 
-import { ChevronDownIcon } from '@radix-ui/react-icons';
+import { ChevronDownIcon } from "@radix-ui/react-icons";
 import {
   IconNumber,
   IconPlus,
   IconRuler2,
   IconUsers,
   IconWeight,
-} from '@tabler/icons-react';
-import { motion } from 'framer-motion';
-import { Graduate } from 'next/font/google';
-import Image from 'next/image';
+} from "@tabler/icons-react";
+import { motion } from "framer-motion";
+import { Graduate } from "next/font/google";
+import Image from "next/image";
 import {
   type Dispatch,
   type SetStateAction,
   useContext,
   useEffect,
   useState,
-} from 'react';
-import { api } from '@/trpc/react';
-import type { Team } from '@/server/api/routers/espn';
-import { cn } from '@/lib/utils';
+} from "react";
+import { api } from "@/trpc/react";
+import type { Team } from "@/server/api/routers/espn";
+import { cn } from "@/lib/utils";
 import {
   Accordion,
   AccordionContent,
   AccordionItem,
   AccordionTrigger,
-} from '../_components/ui/accordion';
-import { Avatar, AvatarFallback, AvatarImage } from '../_components/ui/avatar';
-import { Button } from '../_components/ui/button';
-import { Card, CardContent, CardTitle } from '../_components/ui/card';
+} from "../_components/ui/accordion";
+import { Avatar, AvatarFallback, AvatarImage } from "../_components/ui/avatar";
+import { Button } from "../_components/ui/button";
+import { Card, CardContent, CardTitle } from "../_components/ui/card";
 import {
   HoverCard,
   HoverCardContent,
   HoverCardTrigger,
-} from '../_components/ui/hover-card';
-import { Separator } from '../_components/ui/separator';
-import { TeamContext } from '../providers';
+} from "../_components/ui/hover-card";
+import { Separator } from "../_components/ui/separator";
+import { TeamContext } from "../providers";
 
 const graduate = Graduate({
-  weight: '400',
-  subsets: ['latin'],
+  weight: "400",
+  subsets: ["latin"],
 });
 
 export function PlayerSelect({
@@ -51,7 +51,7 @@ export function PlayerSelect({
   onSelect: (arg0: Player) => void;
 }): React.ReactNode {
   const teamRoster = api.espn.getTeamRoster.useQuery(
-    { teamId: team?.id ?? '0' },
+    { teamId: team?.id ?? "0" },
     {
       refetchOnWindowFocus: false,
       refetchOnMount: false,
@@ -60,14 +60,14 @@ export function PlayerSelect({
   );
   const { team: teamContext, setTeam: setTeamContext } =
     useContext(TeamContext);
-  const [expanded, setExpanded] = useState<'player' | 'team' | 'yourTeam'>(
-    'team',
+  const [expanded, setExpanded] = useState<"player" | "team" | "yourTeam">(
+    "team",
   );
   const [selectedPlayer, setSelectedPlayer] = useState<Player>();
 
   useEffect(() => {
     setSelectedPlayer(undefined);
-    setExpanded('team');
+    setExpanded("team");
   }, [team]);
 
   return (
@@ -77,7 +77,7 @@ export function PlayerSelect({
     >
       <motion.div
         animate={{
-          height: expanded === 'player' ? 'auto' : 0,
+          height: expanded === "player" ? "auto" : 0,
         }}
         className="overflow-hidden"
         initial={{ height: 0 }}
@@ -98,11 +98,11 @@ export function PlayerSelect({
               </span>
               {selectedPlayer.headshot ? (
                 <Image
-                  alt={selectedPlayer.headshot.alt ?? ''}
+                  alt={selectedPlayer.headshot.alt ?? ""}
                   className="rounded-xl object-contain"
                   fill
                   quality={100}
-                  src={selectedPlayer.headshot.href ?? ''}
+                  src={selectedPlayer.headshot.href ?? ""}
                 />
               ) : null}
             </div>
@@ -154,8 +154,8 @@ export function PlayerSelect({
       <CardTitle
         className="flex cursor-pointer flex-row items-center gap-2 p-4"
         onClick={() => {
-          if (expanded !== 'team') setExpanded('team');
-          if (expanded === 'team' && selectedPlayer) setExpanded('player');
+          if (expanded !== "team") setExpanded("team");
+          if (expanded === "team" && selectedPlayer) setExpanded("player");
         }}
       >
         {teamRoster.isFetched ? (
@@ -164,23 +164,23 @@ export function PlayerSelect({
             className="aspect-square h-10"
             height={40}
             quality={50}
-            src={teamRoster.data?.team.logo ?? ''}
+            src={teamRoster.data?.team.logo ?? ""}
             width={40}
           />
         ) : null}
-        {teamRoster.data?.team.displayName ?? 'Loading...'}{' '}
+        {teamRoster.data?.team.displayName ?? "Loading..."}{" "}
         <ChevronDownIcon
           className={cn(
-            'tranistion-transform ml-auto h-5 w-5 text-muted-foreground duration-200',
-            expanded === 'team' ? 'rotate-180' : 'rotate-0',
+            "tranistion-transform ml-auto h-5 w-5 text-muted-foreground duration-200",
+            expanded === "team" ? "rotate-180" : "rotate-0",
           )}
         />
       </CardTitle>
       <Separator />
       <motion.div
-        animate={{ height: expanded === 'team' ? 'min-content' : 0 }}
+        animate={{ height: expanded === "team" ? "min-content" : 0 }}
         className="overflow-hidden"
-        initial={{ height: 'min-content' }}
+        initial={{ height: "min-content" }}
       >
         <CardContent className="space-y-2 p-6">
           <Accordion collapsible type="single">
@@ -257,11 +257,11 @@ export function PlayerSelect({
       <CardTitle
         className="flex cursor-pointer flex-row items-center gap-2 p-4"
         onClick={() => {
-          if (expanded === 'yourTeam') {
-            setExpanded('team');
+          if (expanded === "yourTeam") {
+            setExpanded("team");
           }
-          if (expanded !== 'yourTeam') {
-            setExpanded('yourTeam');
+          if (expanded !== "yourTeam") {
+            setExpanded("yourTeam");
           }
         }}
       >
@@ -269,13 +269,13 @@ export function PlayerSelect({
         Your Team
         <ChevronDownIcon
           className={cn(
-            'tranistion-transform ml-auto h-5 w-5 text-muted-foreground duration-200',
-            expanded === 'yourTeam' ? 'rotate-180' : 'rotate-0',
+            "tranistion-transform ml-auto h-5 w-5 text-muted-foreground duration-200",
+            expanded === "yourTeam" ? "rotate-180" : "rotate-0",
           )}
         />
       </CardTitle>
       <motion.div
-        animate={{ height: expanded === 'yourTeam' ? 'min-content' : 0 }}
+        animate={{ height: expanded === "yourTeam" ? "min-content" : 0 }}
         initial={{ height: 0 }}
       >
         <Separator />
@@ -307,7 +307,7 @@ function Player({
   player: Player;
   // eslint-disable-next-line @typescript-eslint/no-explicit-any -- this is fine
   teamRoster: any;
-  setExpanded: (value: SetStateAction<'player' | 'team' | 'yourTeam'>) => void;
+  setExpanded: (value: SetStateAction<"player" | "team" | "yourTeam">) => void;
   setSelectedPlayer: Dispatch<SetStateAction<Player | undefined>>;
 }): React.ReactNode {
   const [cardExpanded, setCardExpanded] = useState<boolean>();
@@ -324,7 +324,7 @@ function Player({
     setCardExpanded(false);
   }
 
-  if (player.status.id !== '1' && player.status.id !== '13')
+  if (player.status.id !== "1" && player.status.id !== "13")
     return (
       <HoverCard
         closeDelay={0}
@@ -347,20 +347,20 @@ function Player({
           <Avatar className="inline-block h-12 w-auto">
             {player.headshot ? (
               <AvatarImage
-                alt={player.headshot.alt ?? ''}
+                alt={player.headshot.alt ?? ""}
                 asChild
                 className="aspect-square object-cover"
-                src={player.headshot.href ?? ''}
+                src={player.headshot.href ?? ""}
                 style={{
                   // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access -- this will exist
                   background: `#${teamRoster.data?.team.color}`,
                 }}
               >
                 <Image
-                  alt={player.headshot.alt ?? ''}
+                  alt={player.headshot.alt ?? ""}
                   height={48}
                   quality={100}
-                  src={player.headshot.href ?? ''}
+                  src={player.headshot.href ?? ""}
                   width={48}
                 />
               </AvatarImage>
@@ -404,7 +404,7 @@ function Player({
           <Button
             className="h-min p-1"
             onClick={() => {
-              setExpanded('player');
+              setExpanded("player");
               setSelectedPlayer(player);
             }}
             size="sm"
@@ -413,11 +413,11 @@ function Player({
             <div className="flex aspect-square h-7 items-center justify-center">
               {player.headshot ? (
                 <Image
-                  alt={player.headshot.alt ?? ''}
+                  alt={player.headshot.alt ?? ""}
                   className="rounded-sm object-cover"
                   height={28}
                   quality={25}
-                  src={player.headshot.href ?? ''}
+                  src={player.headshot.href ?? ""}
                   width={28}
                 />
               ) : null}

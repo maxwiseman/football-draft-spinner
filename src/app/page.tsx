@@ -1,9 +1,9 @@
-'use client';
+"use client";
 
-import { useEffect, useState } from 'react';
-import type { Team } from '@/server/api/routers/espn';
-import { PlayerSelect } from './stages/player-select';
-import { TeamSelection } from './stages/team-selection';
+import { useEffect, useState } from "react";
+import type { Team } from "@/server/api/routers/espn";
+import { PlayerSelect } from "./stages/player-select";
+import { TeamSelection } from "./stages/team-selection";
 
 export default function Page(): React.ReactNode {
   const [stage, setStage] = useState<number>(1);

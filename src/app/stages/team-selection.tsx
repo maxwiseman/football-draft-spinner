@@ -1,12 +1,12 @@
-'use client';
+"use client";
 
-import { IconLoader } from '@tabler/icons-react';
-import { motion } from 'framer-motion';
-import React, { useState } from 'react';
-import { cn } from '@/lib/utils';
-import { api } from '@/trpc/react';
-import type { Team } from '@/server/api/routers/espn';
-import TeamWheel from '../_components/team-wheel';
+import { IconLoader } from "@tabler/icons-react";
+import { motion } from "framer-motion";
+import React, { useState } from "react";
+import { cn } from "@/lib/utils";
+import { api } from "@/trpc/react";
+import type { Team } from "@/server/api/routers/espn";
+import TeamWheel from "../_components/team-wheel";
 
 export function TeamSelection({
   onFinished,
@@ -27,18 +27,18 @@ export function TeamSelection({
   //   spin: () => void;
   //   currentSegment: { team: Team };
   // }>();
-  const [currentSegment, setCurrentSegment] = useState(' ');
+  const [currentSegment, setCurrentSegment] = useState(" ");
   if (teams.isFetched && teams.data)
     return (
       <motion.div
         animate={{
-          width: !shrunk ? '100%' : '25%',
+          width: !shrunk ? "100%" : "25%",
         }}
         className={cn(
-          'flex h-full w-full min-w-[320px] flex-shrink-0 flex-col items-center justify-center',
+          "flex h-full w-full min-w-[320px] flex-shrink-0 flex-col items-center justify-center",
         )}
         initial={{
-          width: '100%',
+          width: "100%",
         }}
       >
         <motion.div

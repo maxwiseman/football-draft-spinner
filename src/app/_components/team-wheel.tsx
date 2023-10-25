@@ -1,8 +1,8 @@
-'use client';
+"use client";
 
-import type { Ref } from 'react';
-import { forwardRef, useEffect, useImperativeHandle, useState } from 'react';
-import type { Team } from '@/server/api/routers/espn';
+import type { Ref } from "react";
+import { forwardRef, useEffect, useImperativeHandle, useState } from "react";
+import type { Team } from "@/server/api/routers/espn";
 
 function TeamWheelComponent(
   {
@@ -11,13 +11,13 @@ function TeamWheelComponent(
     disabled = false,
     onFinished,
     onTeamChange,
-    primaryColor = 'black',
-    contrastColor = 'white',
-    buttonText = 'Spin',
+    primaryColor = "black",
+    contrastColor = "white",
+    buttonText = "Spin",
     size = 290,
     upDuration = 100,
     downDuration = 1000,
-    fontFamily = 'proxima-nova',
+    fontFamily = "proxima-nova",
     gameWidth = 1000,
     playSounds = true,
   }: {
@@ -80,15 +80,15 @@ function TeamWheelComponent(
 
   const initCanvas = (): void => {
     angleCurrent = savedAngle;
-    let canvas = document.getElementById('canvas') as HTMLCanvasElement;
-    if (navigator.userAgent.includes('MSIE')) {
-      canvas = document.createElement('canvas');
-      canvas.setAttribute('width', gameWidth.toString());
-      canvas.setAttribute('height', gameHeight.toString());
-      canvas.setAttribute('id', 'canvas');
-      document.getElementById('wheel')?.appendChild(canvas);
+    let canvas = document.getElementById("canvas") as HTMLCanvasElement;
+    if (navigator.userAgent.includes("MSIE")) {
+      canvas = document.createElement("canvas");
+      canvas.setAttribute("width", gameWidth.toString());
+      canvas.setAttribute("height", gameHeight.toString());
+      canvas.setAttribute("id", "canvas");
+      document.getElementById("wheel")?.appendChild(canvas);
     }
-    canvasContext = canvas.getContext('2d');
+    canvasContext = canvas.getContext("2d");
   };
   const spin = (): void => {
     if (!disabled && isFinished) {
@@ -139,11 +139,11 @@ function TeamWheelComponent(
       lastSegment = currentSegment;
       onTeamChange ? onTeamChange(currentSegment.team) : null;
       if (playSounds) {
-        const clickAudio = new Audio('/click.wav');
+        const clickAudio = new Audio("/click.wav");
         clickAudio.volume = 0.7;
         // clickAudio.playbackRate = Math.random() * (1.5 - 0.1) + 0.5;
         clickAudio.play().catch((err: Error) => {
-          console.error('Error playing audio: ', err);
+          console.error("Error playing audio: ", err);
         });
       }
     }
@@ -204,8 +204,8 @@ function TeamWheelComponent(
     if (!ctx) return;
     ctx.lineWidth = 1;
     ctx.strokeStyle = primaryColor;
-    ctx.textBaseline = 'middle';
-    ctx.textAlign = 'center';
+    ctx.textBaseline = "middle";
+    ctx.textAlign = "center";
     ctx.font = `1em ${fontFamily}`;
     for (let i = 1; i <= len; i++) {
       const angle = PI2 * (i / len) + angleCurrent;
@@ -223,7 +223,7 @@ function TeamWheelComponent(
     ctx.fill();
     ctx.font = `bold 1em ${fontFamily}`;
     ctx.fillStyle = contrastColor;
-    ctx.textAlign = 'center';
+    ctx.textAlign = "center";
     ctx.fillText(buttonText, centerX, centerY + 3);
     ctx.stroke();
 
@@ -253,8 +253,8 @@ function TeamWheelComponent(
     let i =
       teams.length - Math.floor((change / (Math.PI * 2)) * teams.length) - 1;
     if (i < 0) i = i + teams.length;
-    ctx.textAlign = 'center';
-    ctx.textBaseline = 'middle';
+    ctx.textAlign = "center";
+    ctx.textBaseline = "middle";
     ctx.fillStyle = primaryColor;
     ctx.font = `bold 1.5em ${fontFamily}`;
     // eslint-disable-next-line @typescript-eslint/no-non-null-assertion -- This won't be null

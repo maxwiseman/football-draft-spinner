@@ -1,7 +1,7 @@
-'use client';
+"use client";
 
-import type { Ref } from 'react';
-import { forwardRef, useEffect, useImperativeHandle, useState } from 'react';
+import type { Ref } from "react";
+import { forwardRef, useEffect, useImperativeHandle, useState } from "react";
 
 function WheelComponent(
   {
@@ -10,14 +10,14 @@ function WheelComponent(
     winningSegment,
     onFinished,
     onSegmentChange,
-    primaryColor = 'black',
-    contrastColor = 'white',
-    buttonText = 'Spin',
+    primaryColor = "black",
+    contrastColor = "white",
+    buttonText = "Spin",
     isOnlyOnce = true,
     size = 290,
     upDuration = 100,
     downDuration = 1000,
-    fontFamily = 'proxima-nova',
+    fontFamily = "proxima-nova",
     gameWidth = 1000,
     playSounds = true,
   }: {
@@ -42,8 +42,8 @@ function WheelComponent(
   const gameHeight = gameWidth; // * .80;
   const needleSize = gameWidth * 0.1;
   const lineWidth = gameWidth * 0.02;
-  let currentSegment = '';
-  let lastSegment = '';
+  let currentSegment = "";
+  let lastSegment = "";
   let isStarted = false;
   const [isFinished, setIsFinished] = useState(false);
   let timerHandle = 0;
@@ -72,16 +72,16 @@ function WheelComponent(
   };
 
   const initCanvas = (): void => {
-    let canvas = document.getElementById('canvas') as HTMLCanvasElement;
-    if (navigator.userAgent.includes('MSIE')) {
-      canvas = document.createElement('canvas');
-      canvas.setAttribute('width', gameWidth.toString());
-      canvas.setAttribute('height', gameHeight.toString());
-      canvas.setAttribute('id', 'canvas');
-      document.getElementById('wheel')?.appendChild(canvas);
+    let canvas = document.getElementById("canvas") as HTMLCanvasElement;
+    if (navigator.userAgent.includes("MSIE")) {
+      canvas = document.createElement("canvas");
+      canvas.setAttribute("width", gameWidth.toString());
+      canvas.setAttribute("height", gameHeight.toString());
+      canvas.setAttribute("id", "canvas");
+      document.getElementById("wheel")?.appendChild(canvas);
     }
-    canvas.addEventListener('click', spin, false);
-    canvasContext = canvas.getContext('2d');
+    canvas.addEventListener("click", spin, false);
+    canvasContext = canvas.getContext("2d");
   };
   const spin = (): void => {
     upTime = upDuration * Math.max(Math.random() * 7, 3);
@@ -128,11 +128,11 @@ function WheelComponent(
       lastSegment = currentSegment;
       onSegmentChange ? onSegmentChange(currentSegment) : null;
       if (playSounds) {
-        const clickAudio = new Audio('/click.wav');
+        const clickAudio = new Audio("/click.wav");
         clickAudio.volume = 0.7;
         // clickAudio.playbackRate = Math.random() * (1.5 - 0.1) + 0.5;
         clickAudio.play().catch((err: Error) => {
-          console.error('Error playing audio: ', err);
+          console.error("Error playing audio: ", err);
         });
       }
     }
@@ -192,8 +192,8 @@ function WheelComponent(
     if (!ctx) return;
     ctx.lineWidth = 1;
     ctx.strokeStyle = primaryColor;
-    ctx.textBaseline = 'middle';
-    ctx.textAlign = 'center';
+    ctx.textBaseline = "middle";
+    ctx.textAlign = "center";
     ctx.font = `1em ${fontFamily}`;
     for (let i = 1; i <= len; i++) {
       const angle = PI2 * (i / len) + angleCurrent;
@@ -211,7 +211,7 @@ function WheelComponent(
     ctx.fill();
     ctx.font = `bold 1em ${fontFamily}`;
     ctx.fillStyle = contrastColor;
-    ctx.textAlign = 'center';
+    ctx.textAlign = "center";
     ctx.fillText(buttonText, centerX, centerY + 3);
     ctx.stroke();
 
@@ -243,8 +243,8 @@ function WheelComponent(
       Math.floor((change / (Math.PI * 2)) * segments.length) -
       1;
     if (i < 0) i = i + segments.length;
-    ctx.textAlign = 'center';
-    ctx.textBaseline = 'middle';
+    ctx.textAlign = "center";
+    ctx.textBaseline = "middle";
     ctx.fillStyle = primaryColor;
     ctx.font = `bold 1.5em ${fontFamily}`;
     // eslint-disable-next-line @typescript-eslint/no-non-null-assertion -- This is fine
@@ -270,7 +270,7 @@ function WheelComponent(
         height={gameHeight}
         id="canvas"
         style={{
-          pointerEvents: isFinished && isOnlyOnce ? 'none' : 'auto',
+          pointerEvents: isFinished && isOnlyOnce ? "none" : "auto",
         }}
         width={gameWidth}
       />

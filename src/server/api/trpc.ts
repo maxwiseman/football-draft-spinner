@@ -7,12 +7,12 @@
  * need to use are documented accordingly near the end.
  */
 
-import { initTRPC, TRPCError } from '@trpc/server';
-import { type NextRequest } from 'next/server';
-import superjson from 'superjson';
-import { ZodError } from 'zod';
-import { getServerAuthSession } from '@/server/auth';
-import { db } from '@/server/db';
+import { initTRPC, TRPCError } from "@trpc/server";
+import { type NextRequest } from "next/server";
+import superjson from "superjson";
+import { ZodError } from "zod";
+import { getServerAuthSession } from "@/server/auth";
+import { db } from "@/server/db";
 
 /**
  * 1. CONTEXT
@@ -113,7 +113,7 @@ export const publicProcedure = t.procedure;
 const enforceUserIsAuthed = t.middleware(({ ctx, next }) => {
   // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access -- This is fine
   if (!ctx.session?.user) {
-    throw new TRPCError({ code: 'UNAUTHORIZED' });
+    throw new TRPCError({ code: "UNAUTHORIZED" });
   }
   return next({
     ctx: {

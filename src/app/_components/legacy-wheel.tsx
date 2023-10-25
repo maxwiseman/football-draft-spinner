@@ -1,4 +1,4 @@
-import '@/styles/spinner.css';
+import "@/styles/spinner.css";
 
 export default function Spinner(): React.ReactNode {
   const sliceCount = 32;
