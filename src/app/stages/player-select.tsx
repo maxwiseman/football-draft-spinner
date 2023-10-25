@@ -329,7 +329,8 @@ function Player({
       <HoverCard
         closeDelay={0}
         onOpenChange={setCardExpanded}
-        open={cardExpanded ? !hover : undefined}
+        // eslint-disable-next-line react/jsx-no-leaked-render -- I dunno, but for some reason this is the only way it works
+        open={cardExpanded && !hover}
         openDelay={30}
       >
         <HoverCardContent
