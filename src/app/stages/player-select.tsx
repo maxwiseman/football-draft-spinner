@@ -259,10 +259,40 @@ export default function PlayerSelect({
     </Card>
   );
   function Player({ player }: { player: Player }) {
+    const [cardExpanded, setCardExpanded] = useState<boolean>();
+    const [hover, setHover] = useState<boolean>();
+
+    useEffect(() => {
+      if (hover) setCardExpanded(false);
+    }, [hover]);
+    useEffect(() => {
+      if (!cardExpanded) setHover(false);
+    }, [cardExpanded]);
+
+    if (hover == true && cardExpanded == true) {
+      setCardExpanded(false);
+    }
+
     if (player.status.id != "1" || "13")
       return (
-        <HoverCard>
-          <HoverCardContent className=" flex max-h-min w-max min-w-[20rem] flex-row flex-nowrap gap-2">
+        <HoverCard
+          open={cardExpanded && !hover}
+          onOpenChange={setCardExpanded}
+          closeDelay={0}
+          openDelay={30}
+        >
+          <HoverCardContent
+            onMouseEnter={() => {
+              setHover(true);
+            }}
+            onMouseLeave={() => {
+              setHover(false);
+            }}
+            onMouseOut={() => {
+              setHover(false);
+            }}
+            className="flex max-h-min w-max min-w-[20rem] cursor-default flex-row flex-nowrap gap-2"
+          >
             <Avatar className="inline-block h-12 w-auto">
               {player.headshot ? (
                 <AvatarImage
@@ -314,7 +344,11 @@ export default function PlayerSelect({
               </div>
             </div>
           </HoverCardContent>
-          <HoverCardTrigger>
+          <HoverCardTrigger
+            onMouseEnter={() => {
+              setHover(false);
+            }}
+          >
             <Button
               onClick={() => {
                 setExpanded("player");
