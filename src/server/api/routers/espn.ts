@@ -1,17 +1,12 @@
-import { z } from "zod";
-
-import {
-  createTRPCRouter,
-  protectedProcedure,
-  publicProcedure,
-} from "@/server/api/trpc";
+import { z } from 'zod';
+import { createTRPCRouter, publicProcedure } from '@/server/api/trpc';
 
 export const espnRouter = createTRPCRouter({
   getTeams: publicProcedure
     // .input(z.object({ text: z.string() }))
     .query(async () => {
       const data = (await fetch(
-        "https://site.api.espn.com/apis/site/v2/sports/football/nfl/teams",
+        'https://site.api.espn.com/apis/site/v2/sports/football/nfl/teams',
       ).then((response) => response.json())) as TeamsResponse;
 
       return data.sports[0]?.leagues[0]?.teams;
@@ -130,12 +125,12 @@ interface Athlete {
         leaf: boolean;
       };
     };
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any -- This is fine
     injuries: any[]; // You may want to specify the interface of injuries
     teams: {
       $ref: string;
     }[];
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any -- This is fine
     contracts: any[]; // You may want to specify the interface of contracts
     experience: {
       years: number;

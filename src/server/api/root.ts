@@ -1,6 +1,6 @@
-import { postRouter } from "@/server/api/routers/post";
-import { createTRPCRouter } from "@/server/api/trpc";
-import { espnRouter } from "./routers/espn";
+import { postRouter } from '@/server/api/routers/post';
+import { createTRPCRouter } from '@/server/api/trpc';
+import { espnRouter } from './routers/espn';
 
 /**
  * This is the primary router for your server.

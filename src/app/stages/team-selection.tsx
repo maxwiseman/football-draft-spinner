@@ -1,14 +1,14 @@
-"use client";
+'use client';
 
-import { cn } from "@/lib/utils";
-import type { Team } from "@/server/api/routers/espn";
-import { api } from "@/trpc/react";
-import { IconLoader } from "@tabler/icons-react";
-import { motion } from "framer-motion";
-import { useState } from "react";
-import TeamWheel from "../_components/team-wheel";
+import { IconLoader } from '@tabler/icons-react';
+import { motion } from 'framer-motion';
+import React, { useState } from 'react';
+import { cn } from '@/lib/utils';
+import { api } from '@/trpc/react';
+import type { Team } from '@/server/api/routers/espn';
+import TeamWheel from '../_components/team-wheel';
 
-export default function TeamSelection({
+export function TeamSelection({
   onFinished,
   disabled,
   stage,
@@ -16,7 +16,7 @@ export default function TeamSelection({
   onFinished?: (arg0: Team) => void;
   disabled?: boolean;
   stage?: number;
-}) {
+}): React.ReactNode {
   const shrunk: boolean = stage !== 1;
   const teams = api.espn.getTeams.useQuery(undefined, {
     refetchOnWindowFocus: false,
@@ -27,46 +27,46 @@ export default function TeamSelection({
   //   spin: () => void;
   //   currentSegment: { team: Team };
   // }>();
-  const [currentSegment, setCurrentSegment] = useState(" ");
+  const [currentSegment, setCurrentSegment] = useState(' ');
   if (teams.isFetched && teams.data)
     return (
       <motion.div
-        initial={{
-          width: "100%",
-        }}
         animate={{
-          width: !shrunk ? "100%" : "25%",
+          width: !shrunk ? '100%' : '25%',
         }}
         className={cn(
-          "flex h-full w-full min-w-[320px] flex-shrink-0 flex-col items-center justify-center",
+          'flex h-full w-full min-w-[320px] flex-shrink-0 flex-col items-center justify-center',
         )}
+        initial={{
+          width: '100%',
+        }}
       >
         <motion.div
+          animate={{
+            scale: !shrunk ? 1 : 0.5,
+          }}
           initial={{
             translateX: 0,
             translateY: 0,
             scale: 1,
           }}
-          animate={{
-            scale: !shrunk ? 1 : 0.5,
-          }}
         >
           <TeamWheel
-            teams={teams.data}
-            // winningSegment="Team G"
+            buttonText="Spin"
+            contrastColor="white"
+            disabled={disabled}
+            downDuration={1000}
+            fontFamily="Arial"
+            gameWidth={620}
             onFinished={onFinished}
             onTeamChange={(team) => {
               setCurrentSegment(team.displayName);
             }}
             primaryColor="black"
-            contrastColor="white"
-            buttonText="Spin"
             size={300}
-            gameWidth={620}
+            teams={teams.data}
             upDuration={100}
-            downDuration={1000}
-            fontFamily="Arial"
-            disabled={disabled}
+            // winningSegment="Team G"
             // ref={WheelRef}
           />
           <h1 className="mx-auto mt-6 min-h-[40px] w-max">{currentSegment}</h1>

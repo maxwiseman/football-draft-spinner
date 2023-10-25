@@ -1,14 +1,14 @@
-"use client";
+'use client';
 
-import { AnimatePresence } from "framer-motion";
+import { AnimatePresence } from 'framer-motion';
 import {
   createContext,
   useState,
   type ReactNode,
   type Dispatch,
   type SetStateAction,
-} from "react";
-import type { Player } from "./stages/player-select";
+} from 'react';
+import type { Player } from './stages/player-select';
 
 export const TeamContext = createContext<{
   team: Player[];
@@ -16,11 +16,15 @@ export const TeamContext = createContext<{
 }>({
   team: [],
   setTeam: () => {
-    console.error("Something went wrong!");
+    console.error('Something went wrong!');
   },
 });
 
-export default function Providers({ children }: { children: ReactNode }) {
+export function Providers({
+  children,
+}: {
+  children: ReactNode;
+}): React.ReactNode {
   const [team, setTeam] = useState<Player[]>([]);
 
   return (

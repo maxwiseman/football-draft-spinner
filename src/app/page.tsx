@@ -1,11 +1,11 @@
-"use client";
+'use client';
 
-import type { Team } from "@/server/api/routers/espn";
-import { useEffect, useState } from "react";
-import PlayerSelect from "./stages/player-select";
-import TeamSelection from "./stages/team-selection";
+import { useEffect, useState } from 'react';
+import type { Team } from '@/server/api/routers/espn';
+import { PlayerSelect } from './stages/player-select';
+import { TeamSelection } from './stages/team-selection';
 
-export default function Page() {
+export default function Page(): React.ReactNode {
   const [stage, setStage] = useState<number>(1);
   const [wheelDisabled, setWheelDisabled] = useState<boolean>(false);
   useEffect(() => {
@@ -16,13 +16,15 @@ export default function Page() {
   return (
     <div className="flex h-full flex-row flex-nowrap">
       <TeamSelection
+        disabled={wheelDisabled}
         onFinished={async (winner) => {
           setTeam(winner);
           setWheelDisabled(true);
-          await new Promise((resolve) => setTimeout(resolve, 1000));
+          await new Promise((resolve) => {
+            setTimeout(resolve, 1000);
+          });
           setStage(2);
         }}
-        disabled={wheelDisabled}
         stage={stage}
       />
       <div className="flex h-full w-full flex-shrink items-center">

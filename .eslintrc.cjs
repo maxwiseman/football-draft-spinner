@@ -6,11 +6,18 @@ const config = {
   },
   plugins: ["@typescript-eslint"],
   extends: [
+    require.resolve("@vercel/style-guide/eslint/browser"),
+    require.resolve("@vercel/style-guide/eslint/node"),
+    require.resolve("@vercel/style-guide/eslint/next"),
+    require.resolve("@vercel/style-guide/eslint/react"),
+    require.resolve("@vercel/style-guide/eslint/typescript"),
     "next/core-web-vitals",
     "plugin:@typescript-eslint/recommended-type-checked",
     "plugin:@typescript-eslint/stylistic-type-checked",
   ],
   rules: {
+    "import/no-default-export": "off",
+    "import/no-extraneous-dependencies": "off",
     // These opinionated rules are enabled in stylistic-type-checked above.
     // Feel free to reconfigure them to your own preference.
     "@typescript-eslint/array-type": "off",
