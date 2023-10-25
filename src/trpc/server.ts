@@ -1,10 +1,10 @@
 import {
   createTRPCProxyClient,
   loggerLink,
+  // eslint-disable-next-line camelcase -- I can't change this
   unstable_httpBatchStreamLink,
 } from '@trpc/client';
 import { headers } from 'next/headers';
-
 import { type AppRouter } from '@/server/api/root';
 import { getUrl, transformer } from './shared';
 

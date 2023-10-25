@@ -4,9 +4,6 @@ import {
   type DefaultSession,
   type NextAuthOptions,
 } from 'next-auth';
-import DiscordProvider from 'next-auth/providers/discord';
-
-import { env } from '@/env.mjs';
 import { db } from '@/server/db';
 import { mysqlTable } from '@/server/db/schema';
 
@@ -69,4 +66,5 @@ export const authOptions: NextAuthOptions = {
  *
  * @see https://next-auth.js.org/configuration/nextjs
  */
+// eslint-disable-next-line @typescript-eslint/explicit-function-return-type -- This is fine
 export const getServerAuthSession = () => getServerSession(authOptions);
