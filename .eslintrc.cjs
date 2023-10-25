@@ -16,6 +16,7 @@ const config = {
     "plugin:@typescript-eslint/stylistic-type-checked",
   ],
   rules: {
+    "camelcase": "warn",
     "import/no-default-export": "off",
     "import/no-extraneous-dependencies": "off",
     // These opinionated rules are enabled in stylistic-type-checked above.
