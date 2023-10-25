@@ -5,12 +5,11 @@ import {
   createContext,
   useState,
   type ReactNode,
-  Dispatch,
-  SetStateAction,
+  type Dispatch,
+  type SetStateAction,
 } from "react";
 import type { Player } from "./stages/player-select";
 
-// export const team = createContext<Player[]>([]);
 export const TeamContext = createContext<{
   team: Player[];
   setTeam: Dispatch<SetStateAction<Player[]>>;

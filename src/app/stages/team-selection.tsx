@@ -5,7 +5,7 @@ import type { Team } from "@/server/api/routers/espn";
 import { api } from "@/trpc/react";
 import { IconLoader } from "@tabler/icons-react";
 import { motion } from "framer-motion";
-import { createRef, useState } from "react";
+import { useState } from "react";
 import TeamWheel from "../_components/team-wheel";
 
 export default function TeamSelection({
@@ -23,10 +23,10 @@ export default function TeamSelection({
     refetchOnMount: false,
     refetchOnReconnect: false,
   });
-  const WheelRef = createRef<{
-    spin: () => void;
-    currentSegment: { team: Team };
-  }>();
+  // const WheelRef = createRef<{
+  //   spin: () => void;
+  //   currentSegment: { team: Team };
+  // }>();
   const [currentSegment, setCurrentSegment] = useState(" ");
   if (teams.isFetched && teams.data)
     return (
