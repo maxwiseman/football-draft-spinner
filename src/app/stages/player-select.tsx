@@ -1,3 +1,4 @@
+/* eslint-disable @next/next/no-img-element -- Next Image optimization is expensive and I am cheap */
 "use client";
 
 import { ChevronDownIcon } from "@radix-ui/react-icons";
@@ -10,7 +11,6 @@ import {
 } from "@tabler/icons-react";
 import { motion } from "framer-motion";
 import { Graduate } from "next/font/google";
-import Image from "next/image";
 import {
   type Dispatch,
   type SetStateAction,
@@ -71,10 +71,7 @@ export function PlayerSelect({
   }, [team]);
 
   return (
-    <Card
-      className="m-6 w-full overflow-hidden"
-      // style={{ backgroundColor: "#" + teamRoster.data?.team.color }}
-    >
+    <Card className="m-6 w-full overflow-hidden">
       <motion.div
         animate={{
           height: expanded === "player" ? "auto" : 0,
@@ -97,11 +94,16 @@ export function PlayerSelect({
                 {new Array(1000).join(`${selectedPlayer.jersey} `)}
               </span>
               {selectedPlayer.headshot ? (
-                <Image
+                // <Image
+                //   alt={selectedPlayer.headshot.alt ?? ""}
+                //   className="rounded-xl object-contain"
+                //   fill
+                //   quality={100}
+                //   src={selectedPlayer.headshot.href ?? ""}
+                // />
+                <img
                   alt={selectedPlayer.headshot.alt ?? ""}
-                  className="rounded-xl object-contain"
-                  fill
-                  quality={100}
+                  className="absolute h-full w-full rounded-xl object-contain"
                   src={selectedPlayer.headshot.href ?? ""}
                 />
               ) : null}
@@ -159,11 +161,18 @@ export function PlayerSelect({
         }}
       >
         {teamRoster.isFetched ? (
-          <Image
+          // <Image
+          //   alt={`${teamRoster.data?.team.abbreviation} Logo`}
+          //   className="aspect-square h-10"
+          //   height={40}
+          //   quality={50}
+          //   src={teamRoster.data?.team.logo ?? ""}
+          //   width={40}
+          // />
+          <img
             alt={`${teamRoster.data?.team.abbreviation} Logo`}
             className="aspect-square h-10"
             height={40}
-            quality={50}
             src={teamRoster.data?.team.logo ?? ""}
             width={40}
           />
@@ -176,7 +185,7 @@ export function PlayerSelect({
           )}
         />
       </CardTitle>
-      <Separator />
+      {teamContext.length > 0 ? <Separator /> : null}
       <motion.div
         animate={{ height: expanded === "team" ? "min-content" : 0 }}
         className="overflow-hidden"
@@ -252,49 +261,53 @@ export function PlayerSelect({
             </AccordionItem>
           </Accordion>
         </CardContent>
-        <Separator />
+        {teamContext.length > 0 ? <Separator /> : null}
       </motion.div>
-      <CardTitle
-        className="flex cursor-pointer flex-row items-center gap-2 p-4"
-        onClick={() => {
-          if (expanded === "yourTeam") {
-            setExpanded("team");
-          }
-          if (expanded !== "yourTeam") {
-            setExpanded("yourTeam");
-          }
-        }}
-      >
-        <IconUsers className="h-10 w-10 p-2" />
-        Your Team
-        <ChevronDownIcon
-          className={cn(
-            "tranistion-transform ml-auto h-5 w-5 text-muted-foreground duration-200",
-            expanded === "yourTeam" ? "rotate-180" : "rotate-0",
-          )}
-        />
-      </CardTitle>
-      <motion.div
-        animate={{ height: expanded === "yourTeam" ? "min-content" : 0 }}
-        initial={{ height: 0 }}
-      >
-        <Separator />
-        <CardContent className="p-6">
-          <div className="flex flex-row flex-wrap justify-center gap-1">
-            {teamContext.map((player) => {
-              return (
-                <Player
-                  key={player.id}
-                  player={player}
-                  setExpanded={setExpanded}
-                  setSelectedPlayer={setSelectedPlayer}
-                  teamRoster={teamRoster}
-                />
-              );
-            })}
-          </div>
-        </CardContent>
-      </motion.div>
+      {teamContext.length > 0 ? (
+        <>
+          <CardTitle
+            className="flex cursor-pointer flex-row items-center gap-2 p-4"
+            onClick={() => {
+              if (expanded === "yourTeam") {
+                setExpanded("team");
+              }
+              if (expanded !== "yourTeam") {
+                setExpanded("yourTeam");
+              }
+            }}
+          >
+            <IconUsers className="h-10 w-10 p-2" />
+            Your Team
+            <ChevronDownIcon
+              className={cn(
+                "tranistion-transform ml-auto h-5 w-5 text-muted-foreground duration-200",
+                expanded === "yourTeam" ? "rotate-180" : "rotate-0",
+              )}
+            />
+          </CardTitle>
+          <motion.div
+            animate={{ height: expanded === "yourTeam" ? "min-content" : 0 }}
+            initial={{ height: 0 }}
+          >
+            <Separator />
+            <CardContent className="p-6">
+              <div className="flex flex-row flex-wrap justify-center gap-1">
+                {teamContext.map((player) => {
+                  return (
+                    <Player
+                      key={player.id}
+                      player={player}
+                      setExpanded={setExpanded}
+                      setSelectedPlayer={setSelectedPlayer}
+                      teamRoster={teamRoster}
+                    />
+                  );
+                })}
+              </div>
+            </CardContent>
+          </motion.div>
+        </>
+      ) : null}
     </Card>
   );
 }
@@ -349,7 +362,7 @@ function Player({
             {player.headshot ? (
               <AvatarImage
                 alt={player.headshot.alt ?? ""}
-                asChild
+                // asChild
                 className="aspect-square object-cover"
                 src={player.headshot.href ?? ""}
                 style={{
@@ -357,13 +370,13 @@ function Player({
                   background: `#${teamRoster.data?.team.color}`,
                 }}
               >
-                <Image
+                {/* <Image
                   alt={player.headshot.alt ?? ""}
                   height={48}
                   quality={100}
                   src={player.headshot.href ?? ""}
                   width={48}
-                />
+                /> */}
               </AvatarImage>
             ) : null}
             <AvatarFallback className="aspect-square">
@@ -413,11 +426,18 @@ function Player({
           >
             <div className="flex aspect-square h-7 items-center justify-center">
               {player.headshot ? (
-                <Image
+                // <Image
+                //   alt={player.headshot.alt ?? ""}
+                //   className="rounded-sm object-cover"
+                //   height={28}
+                //   quality={25}
+                //   src={player.headshot.href ?? ""}
+                //   width={28}
+                // />
+                <img
                   alt={player.headshot.alt ?? ""}
                   className="rounded-sm object-cover"
                   height={28}
-                  quality={25}
                   src={player.headshot.href ?? ""}
                   width={28}
                 />
